@@ -91,8 +91,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
   
  if numtag == 2:
   # 3. Eastern North America
@@ -103,8 +103,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
  if numtag == 3: 
   # 4. South America (-Amazon)      # crosses equator
@@ -115,8 +115,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
    
  if numtag == 4: 
   # 5. Europe
@@ -127,8 +127,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
   
  if numtag == 5: 
   # NASA
@@ -172,8 +172,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
  if numtag == 7:
   # 8. Southeast Asia
@@ -184,8 +184,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
  if numtag == 8:
   # 9. Africa (-Congo)           # crosses prime meridian and equator
@@ -196,8 +196,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
  if numtag == 9:
   # 10. Sundaland combined 
@@ -208,8 +208,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
   
  if numtag == 10:
   # 11. Sahulland                  # crosses equator
@@ -220,8 +220,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
  if numtag == 11:
   # 12. Australia/Oceania         # crosses equator
@@ -232,8 +232,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
  if numtag == 12:
   # 13. Amazon       # crosses equator 
@@ -244,8 +244,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=minor,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
  if numtag == 13: 
   # 14. Congo        # crosses equator 
@@ -256,8 +256,8 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
-  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree()),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
+                linestyle=minor,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
 
 #-------------------
