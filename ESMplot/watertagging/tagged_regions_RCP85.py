@@ -228,7 +228,7 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   rlats = -60
   rlatn = 4
   rlonw = 52
-  rlone = 119
+  rlone = 180
   # Compute width and height with crossing checks
   dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
@@ -374,10 +374,10 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlonw = -75
   rlone = 0
   ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
-  rlats = 25 # Eastern North Atlantic divider (might be incorrect)
+  rlats = 25 # Eastern North Atlantic divider
   rlatn = 90
-  rlonw = 0
-  rlone = 0
+  rlonw = -30
+  rlone = -30
   ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
 
  if numtag == 17:
@@ -541,7 +541,9 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlatn = 17
   rlonw = 95
   rlone = 119
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+  dx = abs(rlone - rlonw) if (rlone * rlonw >= 0) else abs(rlone) + abs(rlonw)
+  dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
+  ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
  if numtag == 26:
