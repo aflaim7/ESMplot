@@ -67,17 +67,20 @@ model = 'cam'
 
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
-CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-cases = ['0ka',
-         '$21ka$',
-         '$21ka_{GHG}$',
-         '$21ka_{GLAC}$']
+CASES = ["/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.002/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.002.cam.h0.210101-210112.nc"]
+
+cases = ['2100CE']
+#CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+#cases = ['0ka',
+#         '$21ka$',
+#         '$21ka_{GHG}$',
+#         '$21ka_{GLAC}$']
 
 # Anything extra to add to output file name?
-extra_name = 'last20yrs'
+extra_name = 'year2'
 
 #--------------------------------
 # Seasonal averaging variables
@@ -142,15 +145,15 @@ tagcodes = ['ANTA','WNAM','ENAM','SAME','EURO','NASA','INDA','SASA','AFRI','SLCB
             'TASW','TASE','TISW','TISC','TISE','SAHO','TPSC','SPAC','SATL','SIND']
 
 # Number of land vs. ocean tags
-num_landtags  = 13
-num_oceantags = 27
+num_landtags  = 14
+num_oceantags = 26
 
 # Lat/lon values for plotting text in land and ocean tag region plots
 # if central_longitude - 0. (default), lat/lon values are read as specified below
-landlat  = [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
-landlon =  [  0,-100, -58, 55,  2, 99, 113, 99, 113, 135, 135, -61, 22]
-oceanlat = [  36, 36,58,   8, 37, 18,18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40,-40]
-oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-25,  1,57, 83,107,134,-165,-135,-15, 90] 
+landlat  = [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5,0]
+landlon =  [  0,-100, -58, 55,  2, 99, 113, 99, 113, 135, 135, -61, 22,0]
+oceanlat = [  36, 36,58,   8, 37, 18,18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40]
+oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-25,  1,57, 83,107,134,-165,-135,-15] 
 
 # if central_longitude = 180., shifts lon values by 180 depending on their positioning
 #landlat  =     [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
@@ -165,7 +168,7 @@ oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'Guatemala'
+reg_name = 'World'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -198,7 +201,7 @@ if DIFF == False:
  o_extnd = 'both'       # placement of triangles
 
 # When DIFF == True, modify these values for contour levels
-if DIFF == True:
+if DIFF == False:
 
  # Precipitation contours are set based on the following parameters
  p_hival   = 0.5                         # high value
