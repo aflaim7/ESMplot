@@ -31,6 +31,7 @@ from ESMplot.watertagging.watertag_plots import watertagging_values_on_map,plot_
 from ESMplot.watertagging.seas_avg_LL_watertags import seasavg_watertagging_vars
 from ESMplot.climate_analysis import seas_avg_LL as seasavg
 from ESMplot.climate_analysis.coordinate_functions import lat_lon_index_array
+from rich.progress import Progress, TimeElapsedColumn, TimeRemainingColumn, BarColumn, MofNCompleteColumn # terminal progress bar
 
 #########################################################
 #
@@ -67,7 +68,7 @@ model = 'cam'
 
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
-CASES = ["/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.002/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.002.cam.h0.210101-210112.nc"]
+CASES = ["/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210101-210212.nc"]
 
 cases = ['2100CE']
 #CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
@@ -80,7 +81,7 @@ cases = ['2100CE']
 #         '$21ka_{GLAC}$']
 
 # Anything extra to add to output file name?
-extra_name = 'year2'
+extra_name = 'year2-3'
 
 #--------------------------------
 # Seasonal averaging variables
@@ -140,9 +141,14 @@ tagnames = ['Antarctica','Western North America','Eastern North America','South 
             'Sahul region ocean','Tropical Pacific South Central','South Pacific','South Atlantic','South Indian']
 
 # Code name of each tag (in order)
-tagcodes = ['ANTA','WNAM','ENAM','SAME','EURO','NASA','INDA','SASA','AFRI','SLCB','SAHL','AUST','AMAZ','CONG','ENPA','WNPA','WNAT','ENAT',
-            'ARCT','TPNE','CARB','TANW','TANE','MEDI','ARAB','BOFB','SOCB','TPNW','TPNC','TPSE',
-            'TASW','TASE','TISW','TISC','TISE','SAHO','TPSC','SPAC','SATL','SIND']
+tagcodes = ['ANTA','WNAM','ENAM','SAME','EURO',
+            'NASA','INDA','SASA','AFRI','SLCB',
+            'SAHL','AUST','AMAZ','CONG',          # Land end
+            'ENPA','WNPA','WNAT','ENAT','ARCT',
+            'TPNE','CARB','TANW','TANE','MEDI',
+            'ARAB','BOFB','SOCB','TPNW','TPNC',
+            'TPSE','TASW','TASE','TISW','TISC',
+            'TISE','SAHO','TPSC','SPAC','SATL','SIND']
 
 # Number of land vs. ocean tags
 num_landtags  = 14
@@ -150,10 +156,11 @@ num_oceantags = 26
 
 # Lat/lon values for plotting text in land and ocean tag region plots
 # if central_longitude - 0. (default), lat/lon values are read as specified below
-landlat  = [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5,0]
-landlon =  [  0,-100, -58, 55,  2, 99, 113, 99, 113, 135, 135, -61, 22,0]
-oceanlat = [  36, 36,58,   8, 37, 18,18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40]
-oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-25,  1,57, 83,107,134,-165,-135,-15] 
+landlat  = [-81,  38, 38, -20, 58,  22, 11,  11, -2,  -2,  -7, -26,   0,   5]
+landlon =  [  0,-130,-50, -58, 55,   2, 99, 113, 99, 113, 135, 135, -61,  22]
+
+oceanlat = [  36, 36, 60,  60, 60,   8,  30, 18,  18, 44,  10,  25,  11,  11,  15, -15,  -18,-15,  -15,-15, -20,  -5,-15,  -40, -40,-40]
+oceanlon = [-150,-50,-60, -10, 70,-120, -90,-50,   0, 22,  63,  85, 100, 120, 160, -113, -40,  5,-  50, 75,  110,130, 160,-130, -30, 75] 
 
 # if central_longitude = 180., shifts lon values by 180 depending on their positioning
 #landlat  =     [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
@@ -168,7 +175,7 @@ oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'World'
+reg_name = 'Guatemala_test'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -571,7 +578,22 @@ if MAKE_EXCEL == True:
                                   reg_name=reg_name)
 
 
-
+# Terminal progress bar
+with Progress(
+    "[progress.description]{task.description}",
+    BarColumn(),
+    MofNCompleteColumn(),
+    TimeElapsedColumn(),
+    TimeRemainingColumn(),
+) as progress:
+    cases_task = progress.add_task("Cases", total=len(CASES))
+    for i in range(len(CASES)):
+        tags_task = progress.add_task(f"Tags ({cases[i]})", total=len(tagnames))
+        # do per-case work...
+        for tag in range(len(tagnames)):
+            # do per-tag work...
+            progress.advance(tags_task)
+        progress.advance(cases_task)
 
 
 
