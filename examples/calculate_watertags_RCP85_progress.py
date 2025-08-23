@@ -63,7 +63,7 @@ model = 'cam'
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
 CASES = [
-    "/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210101-210212.nc"
+    "/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc"
 ]
 
 cases = ['2100CE']
@@ -77,7 +77,7 @@ cases = ['2100CE']
 #         '$21ka_{GLAC}$']
 
 # Anything extra to add to output file name?
-extra_name = 'year2-3'
+extra_name = '210501-212412'
 
 #--------------------------------
 # Seasonal averaging variables
@@ -163,7 +163,7 @@ oceanlon = [-150,-50,-60, -10, 70,-120, -90,-50,   0, 22,  63,  85, 100, 120, 16
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'Guatemala_test'
+reg_name = 'world_test'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
