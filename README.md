@@ -1,3 +1,8 @@
+aaf August 23, 2025
+This is a fork of AJT's ESMplot found here: https://github.com/alexjt28/ESMplot.git
+This fork repo found here: git@github.com:aflaim7/ESMplot.git
+Contains changes for calculating watertags of 2100CE RCP8.5 timeslice
+
 # ESMplot
 
 Welcome to ESMplot: the Earth System Model plotting package on Python! <br/>
@@ -10,7 +15,7 @@ This is the beta version of ESMplot, a Python package designed for flexible visu
 For current prototype version, download entire directory 'ESMplot' (size: ~55MB) from GitHub and place in your own working directory.
 
 One way to do this is to run this line of code while in your own working directory: <br/>
-```git clone https://github.com/alexjt28/ESMplot.git```
+```git clone git@github.com:aflaim7/ESMplot.git```
 
 # Conda environment
 Use /conda_envs/environment_ESMplot_py310.yml to create a conda environment with python 3.10 to run this package.<br/>
