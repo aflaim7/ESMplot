@@ -14,7 +14,7 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import geocat.viz.util as gv
 import cmaps
-from ESMplot.watertagging.tagged_regions_RCP85 import draw_land_tags, draw_ocean_tags
+from ESMplot.watertagging.tagged_regions import draw_land_tags, draw_ocean_tags
 from ESMplot.plotting.plot_functions import save_multi_image,map_ticks_and_labels,draw_region_box
 from warnings import simplefilter
 

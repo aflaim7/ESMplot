@@ -56,7 +56,7 @@ IND_d18Op  = True
 MAKE_EXCEL = False 
 
 # For the above three outputs, should they be differences between cases?
-DIFF = False 
+DIFF = True
 
 #------------------------------------------------
 # Specify data path variables 
@@ -65,16 +65,21 @@ DIFF = False
 # Component model to specify in case strings
 model = 'cam'
 
+path = "/net/paleonas.wustl.edu/volume1/blkshare/ajthompson/postproc/"
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
-CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-cases = ['0ka',
-         '$21ka$',
-         '$21ka_{GHG}$',
-         '$21ka_{GLAC}$']
+
+CASES = [path+'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc', path+'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
+
+#CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#        'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+#cases = ['0ka',
+#         '$21ka$',
+#         '$21ka_{GHG}$',
+#         '$21ka_{GLAC}$']
+cases = ['0ka','$21ka$']
 
 # Anything extra to add to output file name?
 extra_name = 'last20yrs'
@@ -88,10 +93,12 @@ begi = 'beg'  # 'beg' or index like 0
 endi = 'end'  # 'end' or index like 12
 
 # Season to average over, indices corresponding to individual months, season string will automatically populate later 
-MON = [0,1,2,3,4,5,6,7,8,9,10,11]
+#MON = [0,1,2,3,4,5,6,7,8,9,10,11]
 #MON = [6,7,8,9]
 #MON = [5,6,7]
 #MON = [11,0,1]
+#MON = [7,8,9,10]
+MON = [5,6,7,8]
 
 # Reference list for indices
 # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
@@ -127,18 +134,18 @@ for i in range(len(cases)):
 #----------------------------------------------------------------------------------
 
 # Long-form name of each tag (in order)
-tagnames = ['Antarctica','Western North America','Eastern North America','South America (-Amazon)','Europe','Northern Asia','India','Southeast Asia','Africa (-Congo)','Sundaland combined',
-            'Sahulland','Australia/Oceania','Amazon','Congo','Western North Pacific','Eastern North Pacific',
-            'Western North Atlantic','Eastern North Atlantic','North Barents/Arctic Sea','Tropical Pacific NE','Caribbean','Tropical Atlantic NW',
+tagnames = ['Antarctica','North America/Greenland','South America (-Amazon)','Eurasia','Africa (-Congo)','Sundaland NW',
+            'SundalandNE','Sundaland SW','Sundaland SE','Sahulland','Australia/Oceania','Amazon','Congo','North Pacific',
+            'North Atlantic','North Barents/Arctic Sea','Tropical Pacific NE','Caribbean','Tropical Atlantic NW',
             'Tropical Atlantic NE','Mediterranean','Indian Ocean NW/Arabian Sea','Indian Ocean NE/Bay of Bengal',
-            'Sundaland ocean combined',
+            'Sundaland NW ocean','Sundaland NE ocean/South China Sea','Sundaland SW ocean','Sundaland SE ocean',
             'Tropical Pacific NW','Tropical Pacific North Central','Tropical Pacific SE','Tropical Atlantic SW',
             'Tropical Atlantic SE','Tropical Indian SW','Tropical Indian South Central','Tropical Indian SE',
             'Sahul region ocean','Tropical Pacific South Central','South Pacific','South Atlantic','South Indian']
 
 # Code name of each tag (in order)
-tagcodes = ['ANTA','WNAM','ENAM','SAME','EURO','NASA','INDA','SASA','AFRI','SLCB','SAHL','AUST','AMAZ','CONG','ENPA','WNPA','WNAT','ENAT',
-            'ARCT','TPNE','CARB','TANW','TANE','MEDI','ARAB','BOFB','SOCB','TPNW','TPNC','TPSE',
+tagcodes = ['ANTA','NAMG','SAME','ERAS','AFRI','SLNW','SLNE','SLSW','SLSE','SAHL','AUST','AMAZ','CONG','NPAC','NATL',
+            'ARCT','TPNE','CARB','TANW','TANE','MEDI','ARAB','BOFB','SONW','SONE','SOSW','SOSE','TPNW','TPNC','TPSE',
             'TASW','TASE','TISW','TISC','TISE','SAHO','TPSC','SPAC','SATL','SIND']
 
 # Number of land vs. ocean tags
@@ -165,16 +172,16 @@ oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'Guatemala'
+reg_name = 'West_African_Monsoon'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
 # Define bounds (for single grid cell, set lats as same value and lons as same value)
 # negative values = °S and °W, positive values = °N and °E
-southlat = 14.0
-northlat = 18.0
-westlon  = -92.5
-eastlon  = -90.0
+southlat = 0
+northlat = 20
+westlon  = -15
+eastlon  = 30
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 

@@ -1,3 +1,7 @@
+aaf -August 23, 2025
+This is an archive of a copied version of ESMplot linked to AJT's git repo ESMplot 
+(commit hash eee89b76550ce547f638516f1ba3f7358905608c with additional edits)
+
 # ESMplot
 
 Welcome to ESMplot: the Earth System Model plotting package on Python! <br/>

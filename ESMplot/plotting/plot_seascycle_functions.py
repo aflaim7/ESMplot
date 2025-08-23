@@ -654,7 +654,7 @@ def plot_seasonal_cycle(
   elif mapdiff == True:
    difftxt = '_diff'
  
-  save_multi_image('./'+str(folderpath)+'/seascycle'+difftxt+'_'+str(var_name)+str(vec_name)+'_'+str(extra_name)+str(filesuf))
+  save_multi_image('/'+str(folderpath)+'/seascycle'+difftxt+'_'+str(var_name)+str(vec_name)+'_'+str(extra_name)+str(filesuf))
 
   plt.close('all')
 

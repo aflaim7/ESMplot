@@ -159,44 +159,17 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   rlone = 52  #-180
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
+
  if numtag == 5:
-  # 6. Sundaland NW  
-  rlats = 4
+  # 6. Sundaland combined  
+  rlats = -10
   rlatn = 17
   rlonw = 95  #-180
-  rlone = 108 #-180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
- if numtag == 6:
-  # 7. Sundaland NE  
-  rlats = 4
-  rlatn = 17
-  rlonw = 108 #-180 
   rlone = 119 #-180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
- if numtag == 7: 
-  # 8. Sundaland SW                        # crosses equator
-  rlats = -10
-  rlatn = 4
-  rlonw = 95   #-180
-  rlone = 105  #-180
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
- if numtag == 8:
-  # 9. Sundaland SE            # crosses equator
-  rlats = -10
-  rlatn = 4
-  rlonw = 105  #-180
-  rlone = 119  #-180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
- if numtag == 9:
+    
+ if numtag == 6:
   # 10. Sahulland                  # crosses equator
   rlats = -19
   rlatn = 4
@@ -205,16 +178,20 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
- if numtag == 10:
+ if numtag == 7:
   # 11. Australia/Oceania         # crosses equator
-  rlats = -60
-  rlatn = 4
-  rlonw = 52   #-180
-  rlone = 180  #-180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
- 
- if numtag == 11:
+  rlats = 4    # Northern border part 1
+  rlatn = 4  
+  rlonw = 52
+  rlone = 95 
+  ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
+  rlats = 4    # Northern border part 2
+  rlatn = 4  
+  rlonw = 119 
+  rlone = 180 
+  ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
+
+ if numtag == 8:
   # 12. Amazon       # crosses equator 
   rlats = -10
   rlatn = 10
@@ -223,7 +200,7 @@ def draw_land_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=minor,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
  
- if numtag == 12: 
+ if numtag == 9: 
   # 13. Congo        # crosses equator 
   rlats = -10
   rlatn = 10
@@ -287,7 +264,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
  ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
  '''
 
- if numtag == 13:
+ if numtag == 10:
   # 14. North Pacific 
   rlats = 25   # Western Hemisphere portion
   rlatn = 90
@@ -302,7 +279,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 14:
+ if numtag == 11:
   # 15. North Atlantic
   rlats = 25
   rlatn = 48
@@ -345,7 +322,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlone = 0
   ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
 
- if numtag == 15:
+ if numtag == 12:
   # 16. North Barents/Arctic Sea
   rlats = 48
   rlatn = 90
@@ -354,7 +331,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 16:
+ if numtag == 13:
   # 17. Tropical Pacific NE
   rlats = 25   # Northern border          
   rlatn = 25
@@ -412,7 +389,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlone = -150
   ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
 
- if numtag == 17:
+ if numtag == 14:
   # 18. Caribbean
   rlats = 48   # North border              
   rlatn = 48
@@ -455,7 +432,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlone = -75
   ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
 
- if numtag == 18:
+ if numtag == 15:
   # 19. Tropical Atlantic NW
   rlats = 0
   rlatn = 25
@@ -464,7 +441,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 19:
+ if numtag == 16:
   # 20. Tropical Atlantic NE      # crosses prime meridian
   rlats = 0
   rlatn = 25
@@ -473,7 +450,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 20:
+ if numtag == 17:
   # 21. Mediterranean
   rlats = 30
   rlatn = 48
@@ -482,7 +459,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 21:
+ if numtag == 18:
   # 22. Indian Ocean NW/Arabian Sea
   rlats = 4
   rlatn = 30
@@ -491,7 +468,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 22:
+ if numtag == 19:
   # 23. Indian Ocean NE/Bay of Bengal
   rlats = 4
   rlatn = 30
@@ -500,6 +477,206 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
+ if numtag == 20:
+  # 24. Sundaland combined ocean
+  rlats = -10          # Crosses equator
+  rlatn = 17
+  rlonw = 95
+  rlone = 119
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 21:
+  # 28. Tropical Pacific NW
+  rlats = 4   # Southern border part 2   
+  rlatn = 4
+  rlonw = 119
+  rlone = 119
+  ax.add_line(lines.Line2D([rlonw,rlone],[rlats,rlatn],linestyle=major,color=color,lw=lw,zorder=zorder))
+
+ if numtag == 22:
+  # 29. Tropical Pacific North Central
+  rlats = 0    # Western Hemisphere portion
+  rlatn = 25
+  rlonw = -180
+  rlone = -150
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+  rlats = 0    # Eastern Hemisphere portion
+  rlatn = 25
+  rlonw = 150
+  rlone = 180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 23:
+  # 30. Tropical Pacific SE
+  rlats = -25
+  rlatn = 0
+  rlonw = -150
+  rlone = -60
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 24:
+  # 31. Tropical Atlantic SW
+  rlats = -25
+  rlatn = 0
+  rlonw = -60
+  rlone = -10
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 25:
+  # 32. Tropical Atlantic SE                # crosses prime meridian
+  rlats = -25
+  rlatn = 0
+  rlonw = -10
+  rlone = 20
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 26:
+  # 33. Tropical Indian Ocean SW       # crosses equator
+  rlats = -25
+  rlatn = 4
+  rlonw = 30
+  rlone = 70
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 27:
+  # 34. Tropical Indian Ocean South Central         # crosses equator
+  rlats = -25
+  rlatn = 4
+  rlonw = 70
+  rlone = 95
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
+
+ if numtag == 28: 
+  # 35. Tropical Indian Ocean SE
+  rlats = -25
+  rlatn = -10
+  rlonw = 95
+  rlone = 119
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 29:
+  # 36. Sahul region ocean   # crosses equator
+  rlats = -25
+  rlatn = 4
+  rlonw = 119
+  rlone = 150
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 30:
+  # 37. Tropical Pacific South Central
+  rlats = -25   # Western Hemisphere portion
+  rlatn = 0
+  rlonw = -180
+  rlone = -150
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+  rlats = -25   # Eastern Hemisphere portion
+  rlatn = 0
+  rlonw = 150
+  rlone = 180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 31:
+  # 38. South Pacific
+  rlats = -90   # Western Hemisphere portion
+  rlatn = -25
+  rlonw = -180
+  rlone = -70
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+  rlats = -90   # Eastern Hemisphere portion
+  rlatn = -25
+  rlonw = 140
+  rlone = 180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
+
+ if numtag == 32:
+  # 39. South Atlantic              #     crosses prime meridian
+  rlats = -90
+  rlatn = -25
+  rlonw = -70
+  rlone = 25
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 33:
+  # 40. South Indian Ocean
+  rlats = -90
+  rlatn = -25
+  rlonw = 25
+  rlone = 140
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+
+#-------------------
+# OLD Land tags
+#-------------------
+''' 
+
+ if numtag == 5:
+  # 6. Sundaland NW  
+  rlats = 4
+  rlatn = 17
+  rlonw = 95  #-180
+  rlone = 108 #-180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+ 
+ if numtag == 6:
+  # 7. Sundaland NE  
+  rlats = 4
+  rlatn = 17
+  rlonw = 108 #-180 
+  rlone = 119 #-180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+ 
+ if numtag == 7: 
+  # 8. Sundaland SW                        # crosses equator
+  rlats = -10
+  rlatn = 4
+  rlonw = 95   #-180
+  rlone = 105  #-180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+ 
+ if numtag == 8:
+  # 9. Sundaland SE            # crosses equator
+  rlats = -10
+  rlatn = 4
+  rlonw = 105  #-180
+  rlone = 119  #-180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 7:
+  # 11. Australia/Oceania         # crosses equator
+  rlats = -60
+  rlatn = 4
+  rlonw = 52   #-180
+  rlone = 180  #-180
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+'''
+
+#-------------------
+# OLD Ocean tags
+#-------------------
+'''
  if numtag == 23:
   # 24. Sundaland NW ocean
   rlats = 4
@@ -535,8 +712,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   rlone = 119
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 27:
+ if numtag == 21:
   # 28. Tropical Pacific NW
   rlats = 4
   rlatn = 25
@@ -545,133 +721,4 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 28:
-  # 29. Tropical Pacific North Central
-  rlats = 0    # Western Hemisphere portion
-  rlatn = 25
-  rlonw = -180
-  rlone = -150
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-  rlats = 0    # Eastern Hemisphere portion
-  rlatn = 25
-  rlonw = 150
-  rlone = 180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 29:
-  # 30. Tropical Pacific SE
-  rlats = -25
-  rlatn = 0
-  rlonw = -150
-  rlone = -60
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 30:
-  # 31. Tropical Atlantic SW
-  rlats = -25
-  rlatn = 0
-  rlonw = -60
-  rlone = -10
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 31:
-  # 32. Tropical Atlantic SE                # crosses prime meridian
-  rlats = -25
-  rlatn = 0
-  rlonw = -10
-  rlone = 20
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 32:
-  # 33. Tropical Indian Ocean SW       # crosses equator
-  rlats = -25
-  rlatn = 4
-  rlonw = 30
-  rlone = 70
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 33:
-  # 34. Tropical Indian Ocean South Central         # crosses equator
-  rlats = -25
-  rlatn = 4
-  rlonw = 70
-  rlone = 95
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
-
- if numtag == 34: 
-  # 35. Tropical Indian Ocean SE
-  rlats = -25
-  rlatn = -10
-  rlonw = 95
-  rlone = 119
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 35:
-  # 36. Sahul region ocean   # crosses equator
-  rlats = -25
-  rlatn = 4
-  rlonw = 119
-  rlone = 150
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 36:
-  # 37. Tropical Pacific South Central
-  rlats = -25   # Western Hemisphere portion
-  rlatn = 0
-  rlonw = -180
-  rlone = -150
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-  rlats = -25   # Eastern Hemisphere portion
-  rlatn = 0
-  rlonw = 150
-  rlone = 180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 37:
-  # 38. South Pacific
-  rlats = -90   # Western Hemisphere portion
-  rlatn = -25
-  rlonw = -180
-  rlone = -70
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-  rlats = -90   # Eastern Hemisphere portion
-  rlatn = -25
-  rlonw = 140
-  rlone = 180
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
-
- if numtag == 38:
-  # 39. South Atlantic              #     crosses prime meridian
-  rlats = -90
-  rlatn = -25
-  rlonw = -70
-  rlone = 25
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
- if numtag == 39:
-  # 40. South Indian Ocean
-  rlats = -90
-  rlatn = -25
-  rlonw = 25
-  rlone = 140
-  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
-                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
-
-
-
- 
+'''

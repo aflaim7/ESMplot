@@ -33,19 +33,21 @@ from ESMplot.plotting import plot_seascycle_functions as plotseas
 
 # Component model to specify in case strings
 model = 'cam'
+path = "/net/paleonas.wustl.edu/volume1/blkshare/ajthompson/postproc/"
 
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
-CASES = ['f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-         'f.e12.F_1850_CAM5.wiso.f19.21ka.modern.d18Osw.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-         'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-         'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-         'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
+CASES = [path+'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+         path+'f.e12.F_1850_CAM5.wiso.f19.21ka.modern.d18Osw.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+
+#         'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#         'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc',
+#         'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
 cases = ['0ka',
-         '21ka',
-         '21ka$_{GHG}$',
-         '21ka$_{GLAC}$',
-         '21ka$_{SL}$']
+         '21ka']
+#         '21ka$_{GHG}$',
+#         '21ka$_{GLAC}$',
+#         '21ka$_{SL}$']
 
 # Anything extra to add to output file name?
 extra_name = 'last20yrs'
@@ -76,13 +78,13 @@ endi = 'end'  # 'end' or index like 12
 varfunc = 'var'           # Options: 'var','varlev','prect','PminE','soilvar','rainiso','soiliso','vaporiso','isoroot'
 #.......................................................................................................................
 # If not an 'iso-' variable, specify units
-UNITS = 'K'  # String of units (ex. 'mm/day')
-MULT  = 1.0    # For 'var', 'varlev', and 'soilvar', scale variable(s) by scalar value
+UNITS = 'mm/month'  # String of units (ex. 'mm/day')
+MULT  = 2629746000    # For 'var', 'varlev', and 'soilvar', scale variable(s) by scalar value
 #.......................................................................................................................
 # If varfunc is 'var', 'varlev', or 'soilvar'; only 'UNITS' required for 'prect'
-VAR1 = 'TREFHT'
-VAR2 = None    # options: None or '[name]'
-MATH = None    # options: None or one of 'add'->VAR1+VAR2, 'sub'->VAR1-VAR2, 'mul'->VAR1*VAR2, 'div'->VAR1/VAR2, 'exp'->VAR1**VAR2
+VAR1 = 'PRECC'
+VAR2 = 'PRECL'   # options: None or '[name]'
+MATH = 'add'    # options: None or one of 'add'->VAR1+VAR2, 'sub'->VAR1-VAR2, 'mul'->VAR1*VAR2, 'div'->VAR1/VAR2, 'exp'->VAR1**VAR2
 LEVEL = 800            # Plot at a specific atmospheric pressure level? Specify value in hPa (ex. 850) 
 SOIL_LEV = [0,1,2]     # If you need to plot a soil level, takes average of list, ex. [0] or [0,1,2] 
 #......................................................................................................................
@@ -145,10 +147,10 @@ Global = True
 # Do you want an average over a specific region?
 Region = True  
 
-southlat = 14.0
-northlat = 18.0
-westlon  = -92.5
-eastlon  = -90.0
+southlat = 0.
+northlat = 20.
+westlon  = -15.
+eastlon  = 30.
 
 # Do you want an average at a specific grid point?
 Point = False
@@ -164,7 +166,7 @@ lonpoint = 255.0
 linestyle = ['-']*len(cases)
 linewidth = ['3']*len(cases)
 linecolor = ['k','tab:red','tab:orange','tab:blue','tab:cyan']
-ManY      = True                  # Manual y-axis values
+ManY      = False                  # Manual y-axis values
 ybot      = 293                   # bottom of y-axis
 ytop      = 302                   # top of y-axis
 leg_title = 'Simulation'          # title of legend
@@ -174,11 +176,11 @@ leg_title = 'Simulation'          # title of legend
 #-----------------------------------------------------------
 
 # Manual Levels for contour plotting (True = set manual levels)
-ManLevCntr = True  
-c_hival = 305.   # high value
-c_loval = 280.   # low value
-c_spval = 1.     # spacing
-c_tkstd = 5.     # tick/label stride
+ManLevCntr = True 
+c_hival = 250.  # high value
+c_loval = 0.   # low value
+c_spval = 10.     # spacing
+c_tkstd = 25.     # tick/label stride
 c_extnd = 'both' # where to put triangles; 'both,'neither','max','min'
 
 # Manual Levels for difference plotting (True = set manual levels)
@@ -202,10 +204,10 @@ if World == True:
  LonMin = -180
  LonMax = 180
 else:
- LatMin =  -10.0     # negative values = °S
- LatMax =   40.0     # positive values = °N
- LonMin = -150.0     # negative values = °W
- LonMax =    0.0     # positive values = °E
+ LatMin =  0    # negative values = °S
+ LatMax =  20     # positive values = °N
+ LonMin =  -15     # negative values = °W
+ LonMax =  30     # positive values = °E
 
 #-------------------------------------------------
 # Other plotting specifications are set here
@@ -373,7 +375,7 @@ elif ISO == 'dHDO':
 #------------------
 # Make the plots
 #------------------
-
+folderpath="RAID/work/a.a.flaim/test_ESMplot_out"
 plotseas.plot_seasonal_cycle(
                              # Required variables for plot
                              var=var_avg_by_case,cases=cases,var_name=var_name,units=UNITS,
