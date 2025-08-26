@@ -66,7 +66,7 @@ direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/arc
 
 # 20yr water tagging experiments (cam only)
 CASES = [
-    direct+"f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc"
+    direct+'f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc'
 ]
 
 cases = ['2100CE']
