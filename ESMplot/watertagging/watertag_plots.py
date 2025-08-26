@@ -17,6 +17,9 @@ import cmaps
 from ESMplot.watertagging.tagged_regions_RCP85 import draw_land_tags, draw_ocean_tags
 from ESMplot.plotting.plot_functions import save_multi_image,map_ticks_and_labels,draw_region_box
 from warnings import simplefilter
+# Imports for lat/lon grid lines
+import matplotlib.ticker as mticker
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 # Default arrays
 default_wgt_mon = xr.DataArray(np.ones(12),dims=['time']).astype(float)
@@ -57,7 +60,11 @@ def watertagging_values_on_map(
                                tag_col: str = 'k', tag_zorder: int = 5,
                                diff: bool = False, cntlp: xr.DataArray = None, cntlo: xr.DataArray = None,
                                folderpath: str = '.', reg_name: str = '', extra_name: str = '',
-                               filesuf: str = '.pdf'):
+                               filesuf: str = '.pdf',
+                               show_latlon: bool = True,
+                               gl_xstep: float = 60., gl_ystep: float = 30.,
+                               gl_fs: float = 6., gl_lw: float = 0.3, gl_alpha: float = 0.6,
+                               gl_ls: str = '--'):
 
   '''Creates three map plots showing values of 1) precipitation, 2) precipitation percentage, and
   3) d18Op for land and ocean water tag regions.
@@ -186,6 +193,28 @@ def watertagging_values_on_map(
   ax6 = fig.add_subplot(236, projection=proj) # d18Op (ocean)
   plt.subplots_adjust(wspace=wspace,hspace=hspace)
   
+  # ----------------------
+  # Gridlines + lat/lon labels
+  # ----------------------
+  def _add_latlon_labels(ax, show_bottom=False, show_left=False, xlocs=None, ylocs=None):
+      gl = ax.gridlines(draw_labels=True, linewidth=gl_lw, linestyle=gl_ls, alpha=gl_alpha)
+      # default tick locations from your extent and steps, unless overridden
+      if xlocs is None:
+          xlocs = np.arange(LonMin, LonMax + 1e-9, gl_xstep)
+      if ylocs is None:
+          ylocs = np.arange(LatMin, LatMax + 1e-9, gl_ystep)
+      gl.xlocator = mticker.FixedLocator(xlocs)
+      gl.ylocator = mticker.FixedLocator(ylocs)
+      gl.xformatter = LONGITUDE_FORMATTER
+      gl.yformatter = LATITUDE_FORMATTER
+      gl.top_labels    = False
+      gl.right_labels  = False
+      gl.bottom_labels = bool(show_bottom)
+      gl.left_labels   = bool(show_left)
+      gl.xlabel_style = {'size': gl_fs}
+      gl.ylabel_style = {'size': gl_fs}
+      return gl
+
   # Define land, set anything >[lo_cutoff] land as "land", else as "ocean"
   data_landfrac = xr.open_dataset(path)
   landfrac_all  = data_landfrac.LANDFRAC[0,:,:]
@@ -278,6 +307,29 @@ def watertagging_values_on_map(
   landfrac_bin.plot(ax=ax5,transform=ccrs.PlateCarree(),cmap=LandColorTable,add_colorbar=False,add_labels=False)
   landfrac_bin.plot(ax=ax6,transform=ccrs.PlateCarree(),cmap=OceanColorTable,add_colorbar=False,add_labels=False)
 
+  if show_latlon:
+      eps = 1e-7
+      # All candidate ticks from your current extent
+      x_all = np.arange(LonMin, LonMax + eps, gl_xstep)
+      y_all = np.arange(LatMin, LatMax + eps, gl_ystep)
+  
+      # Top row: no bottom labels; only leftmost shows latitude labels
+      _add_latlon_labels(ax1, show_bottom=False, show_left=True,  xlocs=x_all, ylocs=y_all)
+      _add_latlon_labels(ax3, show_bottom=False, show_left=False, xlocs=x_all, ylocs=y_all)
+      _add_latlon_labels(ax5, show_bottom=False, show_left=False, xlocs=x_all, ylocs=y_all)
+  
+      # Bottom row: avoid duplicate labels at panel joins by dropping edge longitudes
+      # left panel: drop right edge (e.g., no 180)
+      x_left  = x_all[x_all <  (LonMax - eps)]
+      # middle panel: drop both edges (e.g., no -180, no 180)
+      x_mid   = x_all[(x_all > (LonMin + eps)) & (x_all < (LonMax - eps))]
+      # right panel: drop left edge (e.g., no -180)
+      x_right = x_all[x_all >  (LonMin + eps)]
+  
+      _add_latlon_labels(ax2, show_bottom=True,  show_left=True,  xlocs=x_left,  ylocs=y_all)
+      _add_latlon_labels(ax4, show_bottom=True,  show_left=False, xlocs=x_mid,   ylocs=y_all)
+      _add_latlon_labels(ax6, show_bottom=True,  show_left=False, xlocs=x_right, ylocs=y_all)
+      
   #----------------------------
   # Add region/point to plots 
   #----------------------------
