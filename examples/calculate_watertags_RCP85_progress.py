@@ -44,8 +44,8 @@ TEXT_MAPS = True
 PRINT_VAL = False
 
 # Individual global maps of...
-IND_PRECIP = True
-IND_d18Op  = True
+IND_PRECIP = False
+IND_d18Op  = False
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False
@@ -61,9 +61,12 @@ DIFF = False
 model = 'cam'
 
 # File paths and names for each case
+#direct = '/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/'
+direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/'
+
 # 20yr water tagging experiments (cam only)
 CASES = [
-    "/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc"
+    direct+"f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc"
 ]
 
 cases = ['2100CE']
@@ -152,11 +155,14 @@ num_oceantags = 26
 
 # Lat/lon values for plotting text in land and ocean tag region plots
 # if central_longitude - 0. (default), lat/lon values are read as specified below
-landlat  = [-81,  38, 38, -20, 58,  22, 11,  11, -2,  -2,  -7, -26,   0,   5]
-landlon =  [  0,-130,-50, -58, 55,   2, 99, 113, 99, 113, 135, 135, -61,  22]
 
-oceanlat = [  36, 36, 60,  60, 60,   8,  30, 18,  18, 44,  10,  25,  11,  11,  15, -15,  -18,-15,  -15,-15, -20,  -5,-15,  -40, -40,-40]
-oceanlon = [-150,-50,-60, -10, 70,-120, -90,-50,   0, 22,  63,  85, 100, 120, 160, -113, -40,  5,-  50, 75,  110,130, 160,-130, -30, 75]
+# Tag codes:ANTA,WNAM,ENAM,SAME,EURO,NASA,INDA,SASA,AFRI,SLCB,SAHL,AUST,AMAZ,CONG,
+landlat  = [ -81,  38,  38, -20,  58,  58,  20,  25,  20,   4,  -7, -26,   0,   3]
+landlon =  [   0,-130, -50, -58,  30,  90,  80, 105,  20, 105, 135, 135, -61,  22]
+
+# Tag codes:ENPA,WNPA,WNAT,ENAT,ARCT,TPNE,CARB,TANW,TANE,MEDI,ARAB,BOFB,SOCB,TPNW,TPNC,TPSE,TASW,TASE,TISW,TISC,TISE,SAHO,TPSC,SPAC,SATL,SIND
+oceanlat = [  36,  36,  60,  60,  60,   8,  30,  15,  15,  40,  10,  20,   4,  15,  15, -15, -15, -15,  -8, -15, -18,  -7, -15,  -40, -40,-40]
+oceanlon = [-150, 150, -60,   0,  70,-120, -90, -50,   0,  22,  63,  85, 105, 135, 160,-113, -30,   5,  55,  80, 108, 135, 160, -130, -30, 75]
 
 #------------------------------------------------------------------------------------------
 # Define region for which water tagging results will be calculated
