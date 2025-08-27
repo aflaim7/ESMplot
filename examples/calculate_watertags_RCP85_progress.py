@@ -62,11 +62,12 @@ model = 'cam'
 
 # File paths and names for each case
 #direct = '/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/'
-direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/'
+direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/climatology/'
 
 # 20yr water tagging experiments (cam only)
 CASES = [
-    direct+'f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc'
+    #direct + 'f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.210501-212412.nc'
+    direct + 'f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004.cam.h0.2105-2124_monthly_climatology_cat.nc'
 ]
 
 cases = ['2100CE']
@@ -169,7 +170,7 @@ oceanlon = [-150, 150, -60,   0,  70,-120, -90, -50,   0,  22,  63,  85, 105, 13
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'world_test'
+reg_name = 'ncrcat_test'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
