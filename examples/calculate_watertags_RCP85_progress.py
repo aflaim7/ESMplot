@@ -62,7 +62,7 @@ model = 'cam'
 
 # File paths and names for each case
 #direct = '/glade/derecho/scratch/aflaim/iCESM_testcases/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/'
-direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/climatology/'
+direct = '/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/products/'
 
 # 20yr water tagging experiments (cam only)
 CASES = [
