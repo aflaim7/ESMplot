@@ -23,7 +23,7 @@ ds_combined = combine_regions_to_new_tag(
 
 # Sundaocean
 ds_combined = combine_regions_to_new_tag(
-    ds,
+    ds_combined,
     regions=("SONW", "SONE", "SOSW", "SOSE"),
     new_region="SOCB",
     inherit_attrs="consensus",
@@ -33,5 +33,5 @@ ds_combined = combine_regions_to_new_tag(
 )
 
 ## Write out netcdf
-ds_combined.to_netcdf('/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/archive/atm/hist/climatology/' \
+ds_combined.to_netcdf('/RAID/datasets/f.ie12.BRCP85C5CN.f19_g16.LME.004_2100watertags.004/products/' \
 'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.cam.h0.0006-0025.climo_combReg.nc')

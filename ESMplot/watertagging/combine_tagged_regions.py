@@ -1,5 +1,6 @@
 #######################################################################################################
 # 
+# -aaf
 # This function combines the variables associated with a given list of tagged regions
 #   to compare the input with other water tag experiments that use different tags.
 # For example, combine Europe and Asia tags to compare with an experiment that uses a Eurasia tag.
@@ -25,9 +26,9 @@ def combine_regions_to_new_tag(
     dtype: str = "float32",
 
     # attribute/encoding inheritance controls
-    inherit_attrs: str = "prefer_order",  # "prefer_order" | "consensus"
-    copy_encoding: bool = True,           # try to copy .encoding (e.g., _FillValue, scale_factor)
-    annotate_sources: bool = True,        # add helper attrs like 'combined_from_regions'
+    inherit_attrs: str = "prefer_order",     # "prefer_order" | "consensus"
+    copy_encoding: bool = True,              # try to copy .encoding (e.g., _FillValue, scale_factor)
+    annotate_sources: bool = True,           # add helper attrs like 'combined_from_regions'
     consensus_only_keys: set | None = None,  # if set, only require consensus for these keys
     prefer_keys_first_present: tuple = (),   # keys to always take from preferred source even if consensus mode
     keep_nonregion_vars: bool = True
