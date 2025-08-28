@@ -49,14 +49,14 @@ TEXT_MAPS = True
 PRINT_VAL = False 
 
 # Individual global maps of...
-IND_PRECIP = False  
-IND_d18Op  = False  
+IND_PRECIP = True  
+IND_d18Op  = True  
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False 
 
 # For the above three outputs, should they be differences between cases?
-DIFF = True
+DIFF = False
 
 #------------------------------------------------
 # Specify data path variables 
@@ -167,16 +167,23 @@ oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-12
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'diff_test'
+reg_name = 'India'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
 # Define bounds (for single grid cell, set lats as same value and lons as same value)
 # negative values = °S and °W, positive values = °N and °E
-southlat = 14.0
-northlat = 18.0
-westlon  = -92.5
-eastlon  = -90.0
+# Guatamala
+#southlat = 14.0
+#northlat = 18.0
+#westlon  = -92.5
+#eastlon  = -90.0
+
+# India
+southlat = 5
+northlat = 33
+westlon  = 67
+eastlon  = 92
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
@@ -267,7 +274,7 @@ if overlay_vec == False: u_avg_by_case, v_avg_by_case = None, None
 
 proj         = ccrs.PlateCarree()  # Map projection
 Contour_type = 'RasterFill'        # 'RasterFill' or 'AreaFill'
-folderpath   = 'pdfs'                  # folder to output file to
+folderpath   = 'pdfs/RCP85_timeslice'                  # folder to output file to
 filesuf      = '.pdf'                  # type of output file
 
 # When DIFF == False, modify these to set color tables

@@ -489,8 +489,17 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   dy = abs(rlatn - rlats) if (rlatn * rlats >= 0) else abs(rlatn) + abs(rlats)
   ax.add_patch(Rectangle((rlonw, rlats), dx, dy,transform=ccrs.PlateCarree(),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
-
+  
  if numtag == 21:
+  # 27. Tropical Pacific NW
+  rlats = 4
+  rlatn = 25
+  rlonw = 95
+  rlone = 150
+  ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
+                linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
+
+ if numtag == 22:
   # 29. Tropical Pacific North Central
   rlats = 0    # Western Hemisphere portion
   rlatn = 25
@@ -505,7 +514,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 22:
+ if numtag == 23:
   # 30. Tropical Pacific SE
   rlats = -25
   rlatn = 0
@@ -514,7 +523,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 23:
+ if numtag == 24:
   # 31. Tropical Atlantic SW
   rlats = -25
   rlatn = 0
@@ -523,7 +532,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 24:
+ if numtag == 25:
   # 32. Tropical Atlantic SE                # crosses prime meridian
   rlats = -25
   rlatn = 0
@@ -532,7 +541,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 25:
+ if numtag == 26:
   # 33. Tropical Indian Ocean SW       # crosses equator
   rlats = -25
   rlatn = 4
@@ -541,7 +550,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 26:
+ if numtag == 27:
   # 34. Tropical Indian Ocean South Central         # crosses equator
   rlats = -25
   rlatn = 4
@@ -550,7 +559,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
 
- if numtag == 27: 
+ if numtag == 28: 
   # 35. Tropical Indian Ocean SE
   rlats = -25
   rlatn = -10
@@ -559,7 +568,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 28:
+ if numtag == 29:
   # 36. Sahul region ocean   # crosses equator
   rlats = -25
   rlatn = 4
@@ -568,7 +577,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)+abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 29:
+ if numtag == 30:
   # 37. Tropical Pacific South Central
   rlats = -25   # Western Hemisphere portion
   rlatn = 0
@@ -583,7 +592,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 30:
+ if numtag == 31:
   # 38. South Pacific
   rlats = -90   # Western Hemisphere portion
   rlatn = -25
@@ -598,7 +607,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)-abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=5))
 
- if numtag == 31:
+ if numtag == 32:
   # 39. South Atlantic              #     crosses prime meridian
   rlats = -90
   rlatn = -25
@@ -607,7 +616,7 @@ def draw_ocean_tags(numtag,ax,lw,major,minor,color,zorder):
   ax.add_patch(Rectangle((rlonw,rlats),abs(abs(rlonw)+abs(rlone)),abs(abs(rlatn)-abs(rlats)),
                 linestyle=major,facecolor='none',edgecolor=color,linewidth=lw,zorder=zorder))
 
- if numtag == 32:
+ if numtag == 33:
   # 40. South Indian Ocean
   rlats = -90
   rlatn = -25
