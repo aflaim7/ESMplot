@@ -21,5 +21,5 @@ ncecat -O -u month "$outdir"/clim_mon_*.nc "$outdir$outfile"
 ncap2 -O -s 'month=month+1; month@long_name="calendar month (1-12)"' \
   "$outdir$outfile" "$outdir$outfile"
 
-# (optional) clean up intermediates
+# clean up intermediates
 rm "$outdir"/mon_*.nc "$outdir"/clim_mon_*.nc
