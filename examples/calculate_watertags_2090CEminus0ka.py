@@ -56,7 +56,7 @@ IND_d18Op  = True
 MAKE_EXCEL = False 
 
 # For the above three outputs, should they be differences between cases?
-DIFF = False
+DIFF = True
 
 #------------------------------------------------
 # Specify data path variables 
@@ -167,7 +167,7 @@ oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-12
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'India'
+reg_name = 'EastAsia'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -180,10 +180,16 @@ reg_name = 'India'
 #eastlon  = -90.0
 
 # India
+# southlat = 5
+# northlat = 33
+# westlon  = 67
+# eastlon  = 92
+
+# EastAsia
 southlat = 5
-northlat = 33
-westlon  = 67
-eastlon  = 92
+northlat = 40
+westlon  = 92
+eastlon  = 122
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
