@@ -72,31 +72,69 @@ def map_ticks_and_labels(ax,LatMin,LatMax,LonMin,LonMax,lattksp,lontksp,xmin_mj,
 # Given latitude and longitude limits, draw a region box on a map 
 #######################################################################################################
 
-def draw_region_box(ax,slat,nlat,wlon,elon,linestyle,facecolor,edgecolor,linewidth,zorder):
+# def draw_region_box(ax,slat,nlat,wlon,elon,linestyle,facecolor,edgecolor,linewidth,zorder):
 
-   ''' Given a southern latitude, northern latitude, western longitude, and eastern longitude, this   
-   function draws a box on a map plot. This function does not currently have the capability to cross
-   the International Date Line or the North or South Poles. I may add these in the future.'''
+#    ''' Given a southern latitude, northern latitude, western longitude, and eastern longitude, this   
+#    function draws a box on a map plot. This function does not currently have the capability to cross
+#    the International Date Line or the North or South Poles. I may add these in the future.'''
 
-   # Determine where in the world the region exists and specify rectangle height and width accordingly
-   if slat < 0 and nlat <= 0: 
-    height = abs(slat)-abs(nlat) # Southern Hemisphere
-   if slat < 0 and nlat > 0:
-    height = abs(slat)+abs(nlat) # Crosses Equator
-   if slat >= 0 and nlat > 0: 
-    height = abs(slat-nlat)      # Northern Hemisphere
-   if wlon < 0 and elon <= 0: 
-    width = abs(wlon)-abs(elon)  # Western Hemisphere
-   if wlon < 0 and elon > 0:
-    width = abs(wlon)+abs(elon)  # Crosses Prime Meridian
-   if wlon >= 0 and elon > 0:
-    width = abs(wlon-elon)       # Eastern Hemisphere
+#    # Determine where in the world the region exists and specify rectangle height and width accordingly
+#    if slat < 0 and nlat <= 0: 
+#     height = abs(slat)-abs(nlat) # Southern Hemisphere
+#    if slat < 0 and nlat > 0:
+#     height = abs(slat)+abs(nlat) # Crosses Equator
+#    if slat >= 0 and nlat > 0: 
+#     height = abs(slat-nlat)      # Northern Hemisphere
+#    if wlon < 0 and elon <= 0: 
+#     width = abs(wlon)-abs(elon)  # Western Hemisphere
+#    if wlon < 0 and elon > 0:
+#     width = abs(wlon)+abs(elon)  # Crosses Prime Meridian
+#    if wlon >= 0 and elon > 0:
+#     width = abs(wlon-elon)       # Eastern Hemisphere
 
-   # Draw rectangle
-   ax.add_patch(Rectangle((wlon,slat),width,height,linestyle=linestyle,facecolor=facecolor,
-                          edgecolor=edgecolor,linewidth=linewidth,zorder=zorder))
+#    # Draw rectangle
+#    ax.add_patch(Rectangle((wlon,slat),width,height,linestyle=linestyle,facecolor=facecolor,
+#                           edgecolor=edgecolor,linewidth=linewidth,zorder=zorder))
 
+def draw_region_box(ax, slat, nlat, wlon, elon,
+                    linestyle='-', facecolor='none', edgecolor='r',
+                    linewidth=0.8, zorder=10, transform=None):
+    """
+    Draw a lat/lon-aligned rectangle on a Cartopy GeoAxes.
+    - Supports normal boxes and ones that cross the International Date Line
+      by splitting into two rectangles when wlon > elon in the [-180, 180] frame.
+    """
 
+    # Use PlateCarree degrees if not provided
+    if transform is None:
+        transform = ccrs.PlateCarree()
+
+    # Normalize/ensure bottom <= top
+    lat0 = min(slat, nlat)
+    lat1 = max(slat, nlat)
+    height = lat1 - lat0
+
+    # Work in a conventional -180..180 frame
+    # (assumes your lon inputs are already in this range, which matches your ITCZ example)
+    left  = wlon
+    right = elon
+
+    def _add_rect(x0, x1):
+        width = x1 - x0
+        ax.add_patch(
+            Rectangle((x0, lat0), width, height,
+                      linestyle=linestyle, facecolor=facecolor,
+                      edgecolor=edgecolor, linewidth=linewidth,
+                      zorder=zorder, transform=transform)
+        )
+
+    if left <= right:
+        # Simple case (no Date Line crossing)
+        _add_rect(left, right)
+    else:
+        # Crosses the Date Line: split into two pieces
+        _add_rect(left, 180.0)
+        _add_rect(-180.0, right)
 
 
 
