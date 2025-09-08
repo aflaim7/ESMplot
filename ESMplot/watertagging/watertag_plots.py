@@ -58,7 +58,7 @@ def watertagging_values_on_map(
                                bckgrnd_col: str = 'none', bckgrnd_pad: float = 0.05,
                                tag_fs: float = 3.,tag_lw: float = 0.5, 
                                tag_maj: str = '-', tag_min: str = '--', 
-                               tag_col: str = 'k', tag_zorder: int = 5,
+                               tag_col: str = 'k', tag_zorder: int = 5, text_zorder: int = 100,
                                diff: bool = False, cntlp: xr.DataArray = None, cntlo: xr.DataArray = None,
                                folderpath: str = '.', reg_name: str = '', extra_name: str = '',
                                filesuf: str = '.pdf',
@@ -154,6 +154,7 @@ def watertagging_values_on_map(
                                     Default = '-' (tag_maj), '--' (tag_min)
   tag_col:  class 'string', color of lines delineating tag regions. Default = 'k'
   tag_zorder: class 'int', zorder of lines delineating tag regions. Default = 5
+  text_zorder: class 'int', zorder of text for tag region values. Default = 100 to force on top
   diff: class 'bool', toggle to True if plotting text values of a difference between two cases.
                       Default = False
   cntlp: class 'xr.DataArray', if diff=True, this is the precip control variable, 'precip' variable
@@ -394,6 +395,19 @@ def watertagging_values_on_map(
                   facecolor='none',edgecolor=regcol,linewidth=reglw,zorder=10)
 
   #----------------------------
+  # Add tag regions to plots 
+  #----------------------------
+
+  for ltag in range(num_landtags):
+   draw_land_tags(numtag=ltag,ax=ax1,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+   draw_land_tags(numtag=ltag,ax=ax3,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+   draw_land_tags(numtag=ltag,ax=ax5,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+  for otag in range(num_landtags,len(tagnames),1):
+   draw_ocean_tags(numtag=otag,ax=ax2,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+   draw_ocean_tags(numtag=otag,ax=ax4,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+   draw_ocean_tags(numtag=otag,ax=ax6,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
+
+  #----------------------------
   # Add text for values
   #----------------------------
 
@@ -412,49 +426,46 @@ def watertagging_values_on_map(
   # Loop through land values
   for l in range(num_landtags):
    ax1.text(landlon[l],landlat[l],text_precip[l].round(rnd_precip),fontsize=tag_fs,ha='center',va='center',
+            transform=ccrs.PlateCarree(), zorder=text_zorder,
             bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    ax3.text(landlon[l],landlat[l],text_pctpr[l].round(rnd_pctpr),fontsize=tag_fs,ha='center',va='center',
+            transform=ccrs.PlateCarree(), zorder=text_zorder,
             bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    if text_d18Op[l] > 0:
     ax5.text(landlon[l],landlat[l],'+'+str(text_d18Op[l].round(rnd_d18Op)),color='r',fontsize=tag_fs,ha='center',
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    elif text_d18Op[l] < 0:
     ax5.text(landlon[l],landlat[l],text_d18Op[l].round(rnd_d18Op),color='b',fontsize=tag_fs,ha='center',va='center',
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    else:
     ax5.text(landlon[l],landlat[l],text_d18Op[l].round(0),color='k',fontsize=tag_fs,ha='center',va='center',
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
 
 
   # Loop through ocean values
   for o in range(num_landtags,len(tagnames),1):
    ax2.text(oceanlon[o-num_landtags],oceanlat[o-num_landtags],text_precip[o].round(rnd_precip),fontsize=tag_fs,
+            transform=ccrs.PlateCarree(), zorder=text_zorder,
             ha='center',va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    ax4.text(oceanlon[o-num_landtags],oceanlat[o-num_landtags],text_pctpr[o].round(rnd_pctpr),fontsize=tag_fs,
+            transform=ccrs.PlateCarree(), zorder=text_zorder,
             ha='center',va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    if text_d18Op[o] > 0:
     ax6.text(oceanlon[o-num_landtags],oceanlat[o-num_landtags],'+'+str(text_d18Op[o].round(rnd_d18Op)),color='r',
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              fontsize=tag_fs,ha='center',va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',
                                                                facecolor=bckgrnd_col))
    elif text_d18Op[o] < 0:
     ax6.text(oceanlon[o-num_landtags],oceanlat[o-num_landtags],text_d18Op[o].round(rnd_d18Op),color='b',fontsize=tag_fs,
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              ha='center',va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
    else:
     ax6.text(oceanlon[o-num_landtags],oceanlat[o-num_landtags],text_d18Op[o].round(0),color='k',fontsize=tag_fs,
+             transform=ccrs.PlateCarree(), zorder=text_zorder,
              ha='center',va='center',bbox=dict(boxstyle='square',pad=bckgrnd_pad,edgecolor='none',facecolor=bckgrnd_col))
-
-  #----------------------------
-  # Add tag regions to plots 
-  #----------------------------
-
-  for ltag in range(num_landtags):
-   draw_land_tags(numtag=ltag,ax=ax1,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
-   draw_land_tags(numtag=ltag,ax=ax3,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
-   draw_land_tags(numtag=ltag,ax=ax5,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
-  for otag in range(num_landtags,len(tagnames),1):
-   draw_ocean_tags(numtag=otag,ax=ax2,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
-   draw_ocean_tags(numtag=otag,ax=ax4,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
-   draw_ocean_tags(numtag=otag,ax=ax6,lw=tag_lw,major=tag_maj,minor=tag_min,color=tag_col,zorder=tag_zorder)
 
   #---------------------
   # Save as pdf
