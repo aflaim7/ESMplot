@@ -49,8 +49,8 @@ TEXT_MAPS = True
 PRINT_VAL = False 
 
 # Individual global maps of...
-IND_PRECIP = True  
-IND_d18Op  = True  
+IND_PRECIP = False  
+IND_d18Op  = False  
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False 
@@ -74,7 +74,7 @@ cases = ['1850CE',
          '2090CE']
 
 # Anything extra to add to output file name?
-extra_name = 'last20yrs'
+extra_name = ''
 
 #--------------------------------
 # Seasonal averaging variables
@@ -167,17 +167,17 @@ oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-12
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'EastAsia'
+reg_name = 'ITCZ_extend'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
 # Define bounds (for single grid cell, set lats as same value and lons as same value)
 # negative values = °S and °W, positive values = °N and °E
 # Guatamala
-#southlat = 14.0
-#northlat = 18.0
-#westlon  = -92.5
-#eastlon  = -90.0
+# southlat = 14.0
+# northlat = 18.0
+# westlon  = -92.5
+# eastlon  = -90.0
 
 # India
 # southlat = 5
@@ -186,10 +186,22 @@ reg_name = 'EastAsia'
 # eastlon  = 92
 
 # EastAsia
-southlat = 5
-northlat = 40
-westlon  = 92
-eastlon  = 122
+# southlat = 5
+# northlat = 40
+# westlon  = 92
+# eastlon  = 122
+
+# EastAfrica
+# southlat = 0
+# northlat = 32
+# westlon  = 0
+# eastlon  = 60
+
+# ITCZ
+southlat = -10
+northlat = 10
+westlon  = -200
+eastlon  = -80
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
