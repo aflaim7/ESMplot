@@ -167,7 +167,7 @@ oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-12
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'ITCZ_extend'
+reg_name = 'IPWP'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -194,14 +194,20 @@ reg_name = 'ITCZ_extend'
 # EastAfrica
 # southlat = 0
 # northlat = 32
-# westlon  = 0
-# eastlon  = 60
+# westlon  = 25
+# eastlon  = 50
 
 # ITCZ
-southlat = -10
-northlat = 10
-westlon  = -200
-eastlon  = -80
+# southlat = -10
+# northlat = 10
+# westlon  = -200
+# eastlon  = -80
+
+# IPWP
+southlat = -5
+northlat = 15
+westlon  = 115
+eastlon  = 137
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
