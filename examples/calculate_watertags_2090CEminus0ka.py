@@ -49,8 +49,8 @@ TEXT_MAPS = True
 PRINT_VAL = False 
 
 # Individual global maps of...
-IND_PRECIP = False  
-IND_d18Op  = False  
+IND_PRECIP = True  
+IND_d18Op  = True  
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False 
