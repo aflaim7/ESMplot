@@ -49,8 +49,8 @@ TEXT_MAPS = True
 PRINT_VAL = False 
 
 # Individual global maps of...
-IND_PRECIP = True  
-IND_d18Op  = True  
+IND_PRECIP = False  
+IND_d18Op  = False  
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False 
@@ -85,10 +85,11 @@ begi = 'beg'  # 'beg' or index like 0
 endi = 'end'  # 'end' or index like 12
 
 # Season to average over, indices corresponding to individual months, season string will automatically populate later 
-MON = [0,1,2,3,4,5,6,7,8,9,10,11]
+#MON = [0,1,2,3,4,5,6,7,8,9,10,11]
 #MON = [6,7,8,9]
 #MON = [5,6,7]
 #MON = [11,0,1]
+MON = [8,9,10]
 
 # Reference list for indices
 # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
@@ -167,7 +168,7 @@ oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-12
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'IPWP'
+reg_name = 'WestIndianOcean'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -204,10 +205,16 @@ reg_name = 'IPWP'
 # eastlon  = -80
 
 # IPWP
+# southlat = -5
+# northlat = 15
+# westlon  = 115
+# eastlon  = 137
+
+# IO walker
 southlat = -5
 northlat = 15
-westlon  = 115
-eastlon  = 137
+westlon  = 40
+eastlon  = 60
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
