@@ -27,7 +27,7 @@ import cartopy.crs as ccrs
 import cmaps
 from matplotlib import colors
 from ESMplot.watertagging.print_watertag_values import print_watertag_values,monthly_watertag_values_to_excel
-from ESMplot.watertagging.watertag_plots import watertagging_values_on_map,plot_tagged_precip_and_d18Op
+from ESMplot.watertagging.watertag_plots_cenlon import watertagging_values_on_map,plot_tagged_precip_and_d18Op
 from ESMplot.watertagging.seas_avg_LL_watertags import seasavg_watertagging_vars
 from ESMplot.climate_analysis import seas_avg_LL as seasavg
 from ESMplot.climate_analysis.coordinate_functions import lat_lon_index_array
@@ -85,11 +85,11 @@ begi = 'beg'  # 'beg' or index like 0
 endi = 'end'  # 'end' or index like 12
 
 # Season to average over, indices corresponding to individual months, season string will automatically populate later 
-#MON = [0,1,2,3,4,5,6,7,8,9,10,11]
+MON = [0,1,2,3,4,5,6,7,8,9,10,11]
 #MON = [6,7,8,9]
 #MON = [5,6,7]
 #MON = [11,0,1]
-MON = [8,9,10]
+#MON = [8,9,10]
 
 # Reference list for indices
 # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
@@ -149,26 +149,18 @@ num_oceantags = 24
 # if central_longitude - 0. (default), lat/lon values are read as specified below
 # Tag codes:ANTA,NAMG,SAME,ERAS,AFRI,SLCB,SAHL,AUST,AMAZ,CONG,
 landlat  = [-81,   38, -20,  58,  22,   4,  -7, -26,   0,   5]
-landlon =  [  0, -100, -58,  55,   2, 105, 135, 135, -61,  22]
+landlon =  [120, -100, -58,  55,   10, 105, 135, 135, -61,  22]
 
 # Tag codes:NPAC,NATL,ARCT,TPNE,CARB,TANW,TANE,MEDI,ARAB,BOFB,SOCB,TPNW,TPNC,TPSE,TASW,TASE,TISW,TISC,TISE,SAHO,TPSC,SPAC,SATL,SIND
-oceanlat = [  36,  36,  58,   8,  37,  18,  18,  44,  10,  25,   4,  18,   8,  -8, -13, -13,  -5, -10, -17, -20,  -8, -40, -40, -40]
-oceanlon = [-150, -50,  50,-120, -88, -45,   0,  22,  63,  85, 105, 138,-165,-120, -25,   1,  57,  83, 107, 134, -165,-135,-15,  90] 
-
-# if central_longitude = 180., shifts lon values by 180 depending on their positioning
-#landlat  =     [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
-#landlon_pre =  [  0,-100, -58, 55,  2, 99, 113, 99, 113, 135, 135, -61, 22]
-#oceanlat =     [  36, 36,58,   8, 37, 18,18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40,-40]
-#oceanlon_pre = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-25,  1,57, 83,107,134,-165,-135,-15, 90]
-#landlon =      [x - 180 if x > 0 else x + 180 for x in landlon_pre]
-#oceanlon =     [x - 180 if x > 0 else x + 180 for x in oceanlon_pre]
+oceanlat = [  45,  36,  58,   8,  37,  18,  18,  44,  10,  25,   4,  18,   8,  -8, -13, -13,  -5, -10, -17, -20,   -8, -40,-40, -40]
+oceanlon = [-180, -50,  50,-120, -88, -45,   10,  22,  63,  85, 105,138,-180,-120, -25,   10,  57,  83, 107, 134,-180,-135,-15,  90] 
 
 #------------------------------------------------------------------------------------------
 # Define region for which water tagging results will be calculated  
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'WestIndianOcean'
+reg_name = 'IPWP'
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -205,16 +197,16 @@ reg_name = 'WestIndianOcean'
 # eastlon  = -80
 
 # IPWP
-# southlat = -5
-# northlat = 15
-# westlon  = 115
-# eastlon  = 137
-
-# IO walker
 southlat = -5
 northlat = 15
-westlon  = 40
-eastlon  = 60
+westlon  = 115
+eastlon  = 137
+
+# IO walker
+# southlat = -5
+# northlat = 15
+# westlon  = 40
+# eastlon  = 60
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
@@ -272,6 +264,9 @@ else:
  LonMin = -140. #  -180.0     # negative values = °W
  LonMax = 0.    #    60.0     # positive values = °E
 
+# Define central longitude = 180 True or False (cenlon = 0 when false)
+central_lon_180 = True
+
 #---------------------------------------------------------------
 # Specify vectors to overlay on plot, if necessary
 #---------------------------------------------------------------
@@ -323,7 +318,7 @@ elif DIFF == True:
 # Other specifications are set here as kwargs
 #-------------------------------------------------
 
-kwargs_mapvals  = dict(tag_fs=3.0,bckgrnd_col='w',bckgrnd_pad=0.08,tag_zorder=1,central_lon_180=False)
+kwargs_mapvals  = dict(tag_fs=3.0,bckgrnd_col='w',bckgrnd_pad=0.08,tag_zorder=1,)
 kwargs_cntrplot = dict(figw=10.,figh=10.,fdpi=300.)
 kwargs_diffplot = dict(figw=10.,figh=10.,fdpi=300.,cutoff=0.) 
 
@@ -489,7 +484,7 @@ if TEXT_MAPS == True:
                                 season=season,lat=lat,lon=lon,landlat=landlat,landlon=landlon,
                                 oceanlat=oceanlat,oceanlon=oceanlon,slat=southlat,nlat=northlat,
                                 wlon=westlon,elon=eastlon,folderpath=folderpath,filesuf=filesuf,
-                                reg_name=reg_name,extra_name=extra_name,proj=proj,
+                                reg_name=reg_name,extra_name=extra_name,proj=proj,central_lon_180=central_lon_180,
                                 LatMin=LatMin,LatMax=LatMax,LonMin=LonMin,LonMax=LonMax,
                                 **kwargs_mapvals)
  
@@ -516,7 +511,7 @@ if TEXT_MAPS == True:
                                season=season,lat=lat,lon=lon,landlat=landlat,landlon=landlon,
                                oceanlat=oceanlat,oceanlon=oceanlon,slat=southlat,nlat=northlat,
                                wlon=westlon,elon=eastlon,folderpath=folderpath,filesuf=filesuf,
-                               reg_name=reg_name,extra_name=extra_name,proj=proj,
+                               reg_name=reg_name,extra_name=extra_name,proj=proj,central_lon_180=central_lon_180,
                                LatMin=LatMin,LatMax=LatMax,LonMin=LonMin,LonMax=LonMax,
                                **kwargs_mapvals)
 
