@@ -170,7 +170,7 @@ def watertagging_values_on_map(
   '''
 
   # =========================
-  # Helpers
+  # utils
   # =========================
   def _to_geo_lon(lon_east_deg: float) -> float:
       """Normalize to geographic degrees east in [-180, 180]."""
@@ -200,7 +200,7 @@ def watertagging_values_on_map(
       if Wp <= Ep:
           _draw_geo(W, E)
       else:
-          # Split across the wrap: [W, 180] and [-180, E] in geographic space
+          # Split across the wrap: [W, 180] and [-180, E]
           _draw_geo(W,  180.0)
           _draw_geo(-180.0, E)
 
