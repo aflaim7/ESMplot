@@ -1,7 +1,7 @@
-aaf August 23, 2025
-This is a fork of AJT's ESMplot found here: https://github.com/alexjt28/ESMplot.git
-This fork repo found here: git@github.com:aflaim7/ESMplot.git
-Contains changes for calculating watertags of 2100CE RCP8.5 timeslice
+aaf August 23, 2025 <br/>
+This is a fork of AJT's ESMplot found here: https://github.com/alexjt28/ESMplot.git <br/>
+This fork repo found here: git@github.com:aflaim7/ESMplot.git <br/>
+Contains changes for calculating watertags of 2100CE RCP8.5 timeslice <br/>
 
 # ESMplot
 
