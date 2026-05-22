@@ -43,7 +43,7 @@ from ESMplot.climate_analysis.coordinate_functions import lat_lon_index_array
 #------------------------------------------------
 
 # Global maps with values for precip, precip pct, and d18Op
-TEXT_MAPS = True  
+TEXT_MAPS = False  
 
 # Print values for each tag region to screen
 PRINT_VAL = False 
@@ -70,15 +70,15 @@ model = 'cam'
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
 CASES = [dir + 'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc',
+        dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
+        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
 cases = ['0ka',
-         #'$21ka$',
+         '$21ka$']
          #'$21ka_{GHG}$']
          #'$21ka_{GLAC}$']
-         '$21ka_{SL}$']
+         #'$21ka_{SL}$']
 
 # Anything extra to add to output file name?
 extra_name = ''
@@ -152,9 +152,9 @@ num_oceantags = 27
 # Lat/lon values for plotting text in land and ocean tag region plots
 # if central_longitude - 0. (default), lat/lon values are read as specified below
 landlat  = [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
-landlon =  [  0,-100, -58, 55,  2, 99, 113, 99, 113, 135, 135, -61, 22]
-oceanlat = [  36, 36,58,   8, 37, 18,18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40,-40]
-oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-25,  1,57, 83,107,134,-165,-135,-15, 90] 
+landlon =  [180,-100, -58, 55,  10, 95, 116, 95, 116, 135, 135, -61, 22]
+oceanlat = [  36, 36,58,   8, 37, 18, 18,44,10,25, 11, 11, -2, -2, 18,   8,  -8,-13,-13,-5,-10,-17,-20,  -8, -40,-40,-40]
+oceanlon = [-150,-50,50,-120,-88,-45,-20,22,63,85, 95,116, 95,116,138,-165,-120,-25,  10,57, 83,107,134,-165,-135,-15, 90] 
 
 # if central_longitude = 180., shifts lon values by 180 depending on their positioning
 #landlat  =     [-81,  38, -20, 58, 22, 11,  11, -2,  -2,  -7, -26,   0,  5]
@@ -169,7 +169,7 @@ oceanlon = [-150,-50,50,-120,-88,-45, 0,22,63,85,100,113,100,113,138,-165,-120,-
 #------------------------------------------------------------------------------------------
 
 # Name the region
-reg_name = 'Sunda'
+reg_name = ''
 
 # SundaSahul, slat=-12., nlat=10., wlon=90., elon=130.
 
@@ -181,11 +181,47 @@ reg_name = 'Sunda'
 #westlon  = -92.5
 #eastlon  = -90.0
 
-# Sunda
+# EquatorialIPWP
+# southlat = -10
+# northlat = 10
+# westlon  = 90
+# eastlon  = 150
+
+# IndianMonsoon
+# southlat = 5
+# northlat = 25
+# westlon  = 60
+# eastlon  = 80
+
+# SEAmonsoon
+# southlat = 10
+# northlat = 20
+# westlon  = 90
+# eastlon  = 130
+
+# NorthAustralia
+# southlat = -20
+# northlat = -10
+# westlon  = 120
+# eastlon  = 150
+
+# EquatorEastAfrica
+# southlat = -5
+# northlat = 5
+# westlon  = 20
+# eastlon  = 50
+
+# EquatorWestAfrica
+# southlat = 0
+# northlat = 10
+# westlon  = -20
+# eastlon  = 20
+
+# EquatorSouthAmerica
 southlat = -10
-northlat = 15
-westlon  = 95
-eastlon  = 150
+northlat = 0
+westlon  = -60
+eastlon  = -30
 
 #-----------------------------------------------------------------
 # Specify individual map plot contour levels for prect and d18Op 
@@ -244,7 +280,7 @@ else:
  LonMax = 0.    #    60.0     # positive values = °E.
 
 # Define central longitude = 180 True or False (cenlon = 0 when false)
-central_lon_180 = False
+central_lon_180 = True
 
 #---------------------------------------------------------------
 # Specify vectors to overlay on plot, if necessary
@@ -252,16 +288,16 @@ central_lon_180 = False
 
 # Overlay a vector? If True, what type and level of the atmosphere? 
 overlay_vec  = True  
-overlay_type = 'IVT'   # 'wind','IVT'
+overlay_type = 'wind'   # 'wind','IVT'
 
 # Define pressure levels with this array, ex. Pressure array goes from 0 hPa to 1000 hPa by 50 hPa 
 plev = np.arange(0,1050,50)
 
 # Variables for overlay_type == 'wind', uses 'plev' from above
-WIND_LEVEL = 700   # Integer, in hPa
+WIND_LEVEL = 850   # Integer, in hPa
 WIND_UNITS = 'm/s' # Text string
 kwargs_WIND = dict(vec_name=f'{overlay_type}{WIND_LEVEL}hPa',
-                   vec_units='m/s',vec_ref=10.,vec_scale=200.,vec_skip=4)
+                   vec_units='m/s',vec_ref=10.,vec_scale=150.,vec_skip=4)
 
 # Variables for overlay_type == 'IVT', uses 'plev' from above
 ptop_lev = 50.   # in hPa
@@ -277,7 +313,7 @@ if overlay_vec == False: u_avg_by_case, v_avg_by_case = None, None
 # Plotting specifications are set here
 #-------------------------------------------------
 
-proj         = ccrs.PlateCarree()  # Map projection
+proj = ccrs.PlateCarree(central_longitude=180.) if central_lon_180 else ccrs.PlateCarree() # map projection
 Contour_type = 'RasterFill'        # 'RasterFill' or 'AreaFill'
 folderpath   = 'pdfs'                  # folder to output file to
 filesuf      = '.pdf'                  # type of output file
@@ -298,8 +334,8 @@ elif DIFF == True:
 #-------------------------------------------------
 
 kwargs_mapvals  = dict(tag_fs=3.0,bckgrnd_col='w',bckgrnd_pad=0.08,tag_zorder=1)
-kwargs_cntrplot = dict(figw=10.,figh=10.,fdpi=300.)
-kwargs_diffplot = dict(figw=10.,figh=10.,fdpi=300.,cutoff=0.) 
+kwargs_cntrplot = dict(figw=10.,figh=10.,fdpi=300., central_lon_180=central_lon_180)
+kwargs_diffplot = dict(figw=10.,figh=10.,fdpi=300.,cutoff=0., central_lon_180=central_lon_180) 
 
 ###############################################################################
 #
