@@ -679,6 +679,39 @@ def plot_tagged_precip_and_d18Op(
   --------------------------------------------------------------------------------------------------
   '''
 
+  # =========================
+  # Projection handling
+  # =========================
+  # If Pacific-centered view requested and projection is standard PlateCarree, rebuild it
+  if central_lon_180 and isinstance(proj, ccrs.PlateCarree):
+      proj = ccrs.PlateCarree(central_longitude=180.0)
+
+  # Save central longitude for downstream coordinate adjustments
+  _proj_central = getattr(proj, 'central_longitude', 0.0)
+
+  # Helper: normalize any longitude to geographic [-180, 180]
+  def _to_geo_lon(lon_deg):
+      return (lon_deg + 180.0) % 360.0 - 180.0
+
+  # Helper: draw a lat/lon box that may cross the projection wrap boundary
+  def _draw_region_box_wrapped(ax, slat, nlat, wlon_geo, elon_geo,
+                               linestyle, edgecolor, linewidth, zorder):
+      W = _to_geo_lon(wlon_geo)
+      E = _to_geo_lon(elon_geo)
+      # Check whether the box crosses the projection's antimeridian
+      Wp = (W - _proj_central + 180.0) % 360.0 - 180.0
+      Ep = (E - _proj_central + 180.0) % 360.0 - 180.0
+      def _draw(w_, e_):
+          draw_region_box(ax=ax, slat=slat, nlat=nlat, wlon=w_, elon=e_,
+                          linestyle=linestyle, facecolor='none',
+                          edgecolor=edgecolor, linewidth=linewidth, zorder=zorder)
+      if Wp <= Ep:
+          _draw(W, E)
+      else:
+          # Box straddles the wrap: split into two pieces
+          _draw(W,  180.0)
+          _draw(-180.0, E)
+
   #---------------------------------------------------
   # Determine contour level spacing based on 'diff'
   #---------------------------------------------------
@@ -759,8 +792,10 @@ def plot_tagged_precip_and_d18Op(
   prect_c = gv.xr_add_cyclic_longitudes(prect,'lon')
   d18Op_c = gv.xr_add_cyclic_longitudes(d18Op,'lon')
   if overlay_vec == True:
-   uc = gv.xr_add_cyclic_longitudes(u,'lon')
-   vc = gv.xr_add_cyclic_longitudes(v,'lon')
+      uc = gv.xr_add_cyclic_longitudes(u,'lon')
+      vc = gv.xr_add_cyclic_longitudes(v,'lon')
+      uc = uc.values
+      vc = vc.values
 
   #--------------------------------------------------------
   # Make precipitation plots if specified
@@ -778,7 +813,7 @@ def plot_tagged_precip_and_d18Op(
     axp = figp.add_subplot(111, projection=proj)
 
     # Default is global plot, will change if LonMin, etc. are modified
-    axp.set_extent([LonMin,LonMax,LatMin,LatMax],proj)
+    axp.set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree(central_longitude=_proj_central))
 
     # Add features to map as indicated in parameters
     if coast == True:
@@ -797,14 +832,9 @@ def plot_tagged_precip_and_d18Op(
                          lonlblsp=lonlblsp,latlblsp=latlblsp,xpads=xpads,ypads=ypads,
                          tklblsz=tklblsz,proj=proj,top=topax,bot=botax,left=leftax,right=rightax)
 
-    if central_lon_180 == True:
-      # Modification for central_longitude = 180.
-      rlonw = rlonw if rlonw < 0 else rlonw - 180
-      rlone = rlone if rlone < 0 else rlone - 180
-
-    # Draw rectangle over region for which water tagging results will be calculated
-    draw_region_box(ax=axp,slat=rlats,nlat=rlatn,wlon=rlonw,elon=rlone,linestyle=regline,
-                    facecolor='none',edgecolor=regcol,linewidth=reglw,zorder=regzorder)
+    # Draw rectangle over region (handles wrapping for Pacific-centered projections)
+    _draw_region_box_wrapped(ax=axp,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
+                             linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
 
     # Title above precipitation plots
     axp.set_title(str(case)+' Precip ('+p_units+') for '+str(tag+1)+'. '+tagnames[tag],
@@ -826,7 +856,8 @@ def plot_tagged_precip_and_d18Op(
 
     # Overlay wind vectors if turned on
     if overlay_vec == True:
-     vecp = axp.quiver(prect_c.lon[skip1D],prect_c.lat[skip1D],uc[skip2D],vc[skip2D],scale_units='height',pivot='mid',
+     vecp = axp.quiver(prect_c.lon[skip1D],prect_c.lat[skip1D],uc[skip2D],vc[skip2D],
+               transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
                scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
      qkeyp = axp.quiverkey(vecp,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
@@ -852,7 +883,7 @@ def plot_tagged_precip_and_d18Op(
     axo = figo.add_subplot(111, projection=proj)
 
     # Default is global plot, will change if LonMin, etc. are modified
-    axo.set_extent([LonMin,LonMax,LatMin,LatMax],proj)
+    axo.set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree(central_longitude=_proj_central))
 
     # Add features to map as indicated in parameters
     if coast == True:
@@ -871,14 +902,9 @@ def plot_tagged_precip_and_d18Op(
                          lonlblsp=lonlblsp,latlblsp=latlblsp,xpads=xpads,ypads=ypads,
                          tklblsz=tklblsz,proj=proj,top=topax,bot=botax,left=leftax,right=rightax)
 
-    if central_lon_180 == True:
-      # Modification for central_longitude = 180.
-      rlonw = rlonw if rlonw < 0 else rlonw - 180
-      rlone = rlone if rlone < 0 else rlone - 180
-
-    # Draw rectangle over region for which water tagging results will be calculated
-    draw_region_box(ax=axo,slat=rlats,nlat=rlatn,wlon=rlonw,elon=rlone,linestyle=regline,
-                    facecolor='none',edgecolor=regcol,linewidth=reglw,zorder=regzorder)
+    # Draw rectangle over region (handles wrapping for Pacific-centered projections)
+    _draw_region_box_wrapped(ax=axo,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
+                             linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
 
     # Title above d18Op plots
     axo.set_title(str(case)+r' $\delta^{18} O_{P}$ ('+o_units+') for '+str(tag+1)+'. '+tagnames[tag],
@@ -900,7 +926,8 @@ def plot_tagged_precip_and_d18Op(
 
     # Overlay wind vectors if turned on
     if overlay_vec == True:
-     veco = axo.quiver(d18Op_c.lon[skip1D],d18Op_c.lat[skip1D],uc[skip2D],vc[skip2D],scale_units='height',pivot='mid',
+     veco = axo.quiver(d18Op_c.lon[skip1D],d18Op_c.lat[skip1D],uc[skip2D],vc[skip2D],
+                transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
                 scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
      qkeyo = axo.quiverkey(veco,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
