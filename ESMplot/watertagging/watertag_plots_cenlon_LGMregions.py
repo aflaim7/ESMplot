@@ -792,10 +792,8 @@ def plot_tagged_precip_and_d18Op(
   prect_c = gv.xr_add_cyclic_longitudes(prect,'lon')
   d18Op_c = gv.xr_add_cyclic_longitudes(d18Op,'lon')
   if overlay_vec == True:
-      uc = gv.xr_add_cyclic_longitudes(u,'lon')
-      vc = gv.xr_add_cyclic_longitudes(v,'lon')
-      uc = uc.values
-      vc = vc.values
+   uc = gv.xr_add_cyclic_longitudes(u,'lon').values
+   vc = gv.xr_add_cyclic_longitudes(v,'lon').values
 
   #--------------------------------------------------------
   # Make precipitation plots if specified
@@ -833,8 +831,9 @@ def plot_tagged_precip_and_d18Op(
                          tklblsz=tklblsz,proj=proj,top=topax,bot=botax,left=leftax,right=rightax)
 
     # Draw rectangle over region (handles wrapping for Pacific-centered projections)
-    _draw_region_box_wrapped(ax=axp,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
-                             linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
+    if regbox == True:
+     _draw_region_box_wrapped(ax=axp,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
+                              linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
 
     # Title above precipitation plots
     axp.set_title(str(case)+' Precip ('+p_units+') for '+str(tag+1)+'. '+tagnames[tag],
@@ -903,8 +902,9 @@ def plot_tagged_precip_and_d18Op(
                          tklblsz=tklblsz,proj=proj,top=topax,bot=botax,left=leftax,right=rightax)
 
     # Draw rectangle over region (handles wrapping for Pacific-centered projections)
-    _draw_region_box_wrapped(ax=axo,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
-                             linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
+    if regbox == True:
+     _draw_region_box_wrapped(ax=axo,slat=rlats,nlat=rlatn,wlon_geo=rlonw,elon_geo=rlone,
+                              linestyle=regline,edgecolor=regcol,linewidth=reglw,zorder=regzorder)
 
     # Title above d18Op plots
     axo.set_title(str(case)+r' $\delta^{18} O_{P}$ ('+o_units+') for '+str(tag+1)+'. '+tagnames[tag],
