@@ -335,7 +335,7 @@ elif DIFF == True:
 
 kwargs_mapvals  = dict(tag_fs=3.0,bckgrnd_col='w',bckgrnd_pad=0.08,tag_zorder=1)
 kwargs_cntrplot = dict(figw=10.,figh=10.,fdpi=300., central_lon_180=central_lon_180)
-kwargs_diffplot = dict(figw=10.,figh=10.,fdpi=300.,cutoff=0., central_lon_180=central_lon_180) 
+kwargs_diffplot = dict(figw=10.,figh=10.,fdpi=300.,cutoff=0., central_lon_180=central_lon_180, regbox=False) # regbox adds the red box for reference
 
 ###############################################################################
 #
