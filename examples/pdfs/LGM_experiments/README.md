@@ -6,7 +6,7 @@ af106@rice.edu
 
 ## Overview
 
-This directory contains iCESM water tagging simulation results including text-based water tag maps as well as global maps of seasonal precipitation and δ¹⁸Oₚ anomalies, decomposed by LGM forcing component. Each figure shows the difference between a 21ka forcing experiment and the 0ka control, plotted for each of the 40 tagged source regions.
+This directory contains iCESM water tagging simulation results including text-based water tag maps as well as global maps of seasonal precipitation and δ¹⁸Oₚ anomalies across LGM full-forcing and single-forcing experiments relative to the 0ka control. Each figure shows the difference between a 21ka forcing experiment and the 0ka control, plotted for each of the 40 tagged source regions.
 
 All maps are Pacific-centered (central longitude = 180°) and individual tagged region maps have 850 hPa wind vector anomalies overlaid.
 
@@ -19,6 +19,7 @@ All maps are Pacific-centered (central longitude = 180°) and individual tagged 
 
 ---
 ## Destination regions
+These region boundaries were used for the respective text-based tag maps found in `/taggedMaps/`  
 
 | Region | Latitude bounds | Longitude bounds |
 |---|---|---|
