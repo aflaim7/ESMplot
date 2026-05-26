@@ -152,8 +152,11 @@ overlay_type = 'wind'
 plev       = np.arange(0, 1050, 50)
 WIND_LEVEL = 850
 WIND_UNITS = 'm/s'
+# vec_scale_ref: the vec_scale that looks correct for the full forcing difference.
+# The dynamic scaling will anchor all other forcings relative to this value.
+vec_scale_ref = 200.
 kwargs_WIND = dict(vec_name=f'{overlay_type}{WIND_LEVEL}hPa',
-                   vec_units='m/s', vec_ref=10., vec_scale=200., vec_skip=4)
+                   vec_units='m/s', vec_ref=10., vec_scale=vec_scale_ref, vec_skip=4)
 
 ptop_lev = 50.
 pbot_lev = 1018.
@@ -334,9 +337,35 @@ for season_name, MON in SEASONS.items():
 
     print(f'  Plotting maps for {season_name}...')
 
+    # Compute p95 of full forcing wind anomaly magnitude (case index 1 = full forcing).
+    # All forcings are scaled relative to this so that full forcing uses vec_scale_ref
+    # and weaker forcings get proportionally longer arrows.
+    if overlay_vec:
+        u_full = (U[1,:,:] - U[0,:,:]).values
+        v_full = (V[1,:,:] - V[0,:,:]).values
+        p95_full = np.nanpercentile(np.sqrt(u_full**2 + v_full**2), 95)
+        if p95_full == 0.:
+            p95_full = 1.  # fallback to avoid division by zero
+    
     for i in range(1, len(CASES)):
 
         print(f'    {cases[i]}-{cases[0]}  [{season_name}]')
+
+        # Scale vec_scale proportionally: full forcing gets vec_scale_ref,
+        # weaker forcings get a smaller vec_scale (= longer arrows).
+        if overlay_vec:
+            u_diff = (U[i,:,:] - U[0,:,:]).values
+            v_diff = (V[i,:,:] - V[0,:,:]).values
+            p95_i  = np.nanpercentile(np.sqrt(u_diff**2 + v_diff**2), 95)
+            if p95_i > 0.:
+                vec_scale_dynamic = vec_scale_ref * (p95_i / p95_full)
+            else:
+                vec_scale_dynamic = vec_scale_ref
+        else:
+            vec_scale_dynamic = vec_scale_ref
+
+        # Build a kwargs_vec copy with the updated scale
+        kwargs_vec_dynamic = {**kwargs_vec, 'vec_scale': vec_scale_dynamic}
 
         plot_tagged_precip_and_d18Op(
             # Required variables
@@ -351,7 +380,7 @@ for season_name, MON in SEASONS.items():
             overlay_vec=overlay_vec,
             u=U[i,:,:] - U[0,:,:] if overlay_vec else None,
             v=V[i,:,:] - V[0,:,:] if overlay_vec else None,
-            **kwargs_vec,
+            **kwargs_vec_dynamic,
 
             # Mapping specifications
             colorp=colorp, coloro=coloro, cntr_type=Contour_type, proj=proj,
