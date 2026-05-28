@@ -8,6 +8,7 @@
 import numpy as np
 import xarray as xr
 import math
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 from matplotlib import colors
@@ -241,6 +242,9 @@ def plot_contour_map_avg(
   #------------------------------
   # Set base figure parameters
   #------------------------------
+
+  # Data transform: must match the longitude convention of the data (0-360 vs -180-180)
+  # CESM data uses 0-360, so the transform central_longitude must match the projection
   
   # Ceiling of half the number of cases, used for looping through axes
   rowceil = math.ceil(len(cases)/2)
@@ -271,6 +275,30 @@ def plot_contour_map_avg(
   # Setting vector grid cell skipping parameters
   skip1D = (slice(None, None, vec_skip)) 
   skip2D = (slice(None, None, vec_skip), slice(None, None, vec_skip))
+
+  #-----------------------------------------------------------------------
+  # Prepare lon/data arrays for plotting
+  # CESM uses 0-360 lons; ccrs.PlateCarree() only renders -180 to 180.
+  # Strip the cyclic point, roll 180deg so prime meridian is at edges,
+  # convert remaining >180 values to negative, re-add cyclic at 180.
+  # After this, lon_plot runs -180 to 180 and transform=PlateCarree works.
+  #-----------------------------------------------------------------------
+
+  lon_cyc = varc.lon.values            # 0 ... 357.5 ... 360 (145 pts with cyclic)
+  lon_raw = lon_cyc[:-1]               # 0 ... 357.5          (144 pts, no cyclic)
+  nroll   = len(lon_raw) // 2          # 72 (shift by 180 deg)
+  lon_rolled = np.roll(lon_raw, -nroll)                            # 180 ... 357.5, 0 ... 177.5
+  lon_shifted = np.where(lon_rolled > 180., lon_rolled - 360., lon_rolled)  # -180 ... 177.5
+  lon_plot = np.append(lon_shifted, 180.)                          # -180 ... 177.5, 180
+
+  def prep_data(arr2d):
+   '''Roll a (lat, 145-lon) array to match lon_plot (-180 to 180).'''
+   d = arr2d[:, :-1]                                    # strip cyclic → (lat, 144)
+   d_rolled = np.roll(d, -nroll, axis=1)               # roll
+   return np.concatenate([d_rolled, d_rolled[:, :1]], axis=1)  # re-add cyclic → (lat, 145)
+
+  lon2d, lat2d = np.meshgrid(lon_plot, varc.lat.values)
+  lon1d_skip   = lon_plot[skip1D]
 
   #----------------
   # Define figures
@@ -311,7 +339,7 @@ def plot_contour_map_avg(
     for c in range(2):
      axes[r,c].set_title(fig_let[2*r+c]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases[2*r+c],loc=ttlloc,
                                                                                         fontsize=ttlfts,pad=ttlpad) 
-     axes[r,c].set_extent([LonMin,LonMax,LatMin,LatMax],proj)                                    
+     axes[r,c].set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())                                    
      if coast == True:
       axes[r,c].add_feature(cfeature.COASTLINE,linewidths=coastlw)
      if lake == True:
@@ -325,7 +353,7 @@ def plot_contour_map_avg(
    for i in range(len(cases)):
     axes[i].set_title(fig_let[i]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases[i],loc=ttlloc,fontsize=ttlfts,
                                                                                                             pad=ttlpad) 
-    axes[i].set_extent([LonMin,LonMax,LatMin,LatMax],proj)                            
+    axes[i].set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())                            
     # Figure map
     if coast == True:
      axes[i].add_feature(cfeature.COASTLINE,linewidths=coastlw)
@@ -400,27 +428,29 @@ def plot_contour_map_avg(
    for r in range(rowceil):
     for c in range(2):
       if cntr_type == 'AreaFill':
-       cntr = varc[2*r+c,:,:].plot.contourf(ax=axes[r,c],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                            add_colorbar=False,add_labels=False,extend=extnd)
+       cntr = axes[r,c].pcolormesh(lon2d,lat2d,prep_data(varc[2*r+c,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                   norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
       elif cntr_type == 'RasterFill':
-       cntr = varc[2*r+c,:,:].plot(ax=axes[r,c],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                   add_colorbar=False,add_labels=False,extend=extnd)
+       cntr = axes[r,c].pcolormesh(lon2d,lat2d,prep_data(varc[2*r+c,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                   norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
       if overlay_vec == True:
-       vec = axes[r,c].quiver(uc.lon[skip1D],uc.lat[skip1D],uc[2*r+c,:,:][skip2D],vc[2*r+c,:,:][skip2D],scale_units='height',pivot='mid',
-                               scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
+       vec = axes[r,c].quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[2*r+c,:,:].values)[skip2D],prep_data(vc[2*r+c,:,:].values)[skip2D],
+                              transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
+                              scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
        qkey = axes[r,c].quiverkey(vec,0.8,0.2,vec_ref,str(vec_ref)+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
   if numcases == 'odd':
    for i in range(len(cases)):
      if cntr_type == 'AreaFill':
-      cntr = varc[i,:,:].plot.contourf(ax=axes[i],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                       add_colorbar=False,add_labels=False,extend=extnd)
+      cntr = axes[i].pcolormesh(lon2d,lat2d,prep_data(varc[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
      elif cntr_type == 'RasterFill':
-      cntr = varc[i,:,:].plot(ax=axes[i],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                              add_colorbar=False,add_labels=False,extend=extnd)
+      cntr = axes[i].pcolormesh(lon2d,lat2d,prep_data(varc[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
      if overlay_vec == True:
-      vec = axes[i].quiver(uc.lon[skip1D],uc.lat[skip1D],uc[i,:,:][skip2D],vc[i,:,:][skip2D],scale_units='height',pivot='mid',
-                              scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
+      vec = axes[i].quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[i,:,:].values)[skip2D],prep_data(vc[i,:,:].values)[skip2D],
+                           transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
+                           scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
       qkey = axes[i].quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
   #-------------------------------
@@ -428,7 +458,7 @@ def plot_contour_map_avg(
   #-------------------------------
   
   cbar = fig.colorbar(cntr,ax=axes,orientation=cbar_orient,ticks=MultipleLocator(tkstd),shrink=cbar_shrk,pad=cbar_pad,label=units,
-                                   spacing=cbar_sp)
+                                   spacing=cbar_sp,extend=extnd)
   cbar.ax.tick_params(labelsize=cbar_lblsz)
 
   #------------------------------
@@ -521,7 +551,7 @@ def plot_contour_map_avg(
     axi  = figi.add_subplot(111, projection=proj) 
     axi.set_title(fig_let[i]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases[i],loc=ttlloc,fontsize=ttlfts,
                                                                                                    pad=ttlpad)  # title
-    axi.set_extent([LonMin,LonMax,LatMin,LatMax],proj)                                                          # map extent
+    axi.set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())                                                          # map extent
     if coast == True:
      axi.add_feature(cfeature.COASTLINE,linewidths=coastlw)
     if lake == True:
@@ -535,16 +565,18 @@ def plot_contour_map_avg(
                          glcolor=glcolor,lonlblsp=lonlblsp,latlblsp=latlblsp,xpads=xpads,ypads=ypads,tklblsz=tklblsz,
                          top=False,bot=True,left=True,right=True)
     if cntr_type == 'AreaFill':
-     cntr = varc[i,:,:].plot.contourf(ax=axi,transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                            add_colorbar=True,cbar_kwargs={'orientation':cbar_orient,'ticks':MultipleLocator(tkstd),
-                                            'shrink':cbar_shrk,'pad':cbar_pad,'label':units,'spacing':cbar_sp},add_labels=False,extend=extnd)                       
+     cntr = axi.pcolormesh(lon2d,lat2d,prep_data(varc[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                           norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
     elif cntr_type == 'RasterFill':
-     cntr = varc[i,:,:].plot(ax=axi,transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                    add_colorbar=True,cbar_kwargs={'orientation':cbar_orient,'ticks':MultipleLocator(tkstd),
-                                    'shrink':cbar_shrk,'pad':cbar_pad,'label':units},add_labels=False,extend=extnd) 
+     cntr = axi.pcolormesh(lon2d,lat2d,prep_data(varc[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                           norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
+    cbar_i = plt.colorbar(cntr,ax=axi,orientation=cbar_orient,ticks=MultipleLocator(tkstd),
+                          shrink=cbar_shrk,pad=cbar_pad,label=units,spacing=cbar_sp,extend=extnd)
+    cbar_i.ax.tick_params(labelsize=cbar_lblsz)
     if overlay_vec == True:
-     vec = axi.quiver(uc.lon[skip1D],uc.lat[skip1D],uc[i,:,:][skip2D],vc[i,:,:][skip2D],scale_units='height',pivot='mid',scale=vec_scale,
-                                      width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
+     vec = axi.quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[i,:,:].values)[skip2D],prep_data(vc[i,:,:].values)[skip2D],
+                      transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',scale=vec_scale,
+                      width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
      qkey = axi.quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
     if regbox == True:
      draw_region_box(ax=axi,slat=slat-latadj,nlat=nlat+latadj,wlon=wlon-lonadj,elon=elon+lonadj,
@@ -799,6 +831,8 @@ def plot_diff_contour_map_avg(
     udiff[x-1,:,:] = uc[x,:,:] - uc[0,:,:]
     vdiff[x-1,:,:] = vc[x,:,:] - vc[0,:,:]
 
+
+
   #------------------------------
   # Set base figure parameters
   #------------------------------
@@ -832,6 +866,28 @@ def plot_diff_contour_map_avg(
   # Setting vector grid cell skipping parameters
   skip1D = (slice(None, None, vec_skip))
   skip2D = (slice(None, None, vec_skip), slice(None, None, vec_skip))
+
+  #-----------------------------------------------------------------------
+  # Prepare coordinates and data for Pacific-centered plotting.
+  # CESM lons run 0-357.5; ccrs.PlateCarree() only handles -180 to 180.
+  # Roll by half the array so 180deg becomes the seam, then convert
+  # remaining lons > 180 to negative. Re-add cyclic point at 180.
+  #-----------------------------------------------------------------------
+
+  lon_raw  = diff.lon.values[:-1]                                           # strip cyclic: 0...357.5 (144 pts)
+  nroll    = len(lon_raw) // 2                                              # 72
+  lon_roll = np.roll(lon_raw, -nroll)                                       # 180...357.5, 0...177.5
+  lon_shift= np.where(lon_roll > 180., lon_roll - 360., lon_roll)          # -180...-2.5, 0...177.5
+  lon_plot = np.append(lon_shift, 180.)                                     # add cyclic at 180: 145 pts
+
+  def prep_data(arr2d):
+   '''Convert a (lat, 145-lon) array from 0-360 to -180-180 lon ordering.'''
+   d = arr2d[:, :-1]                                                        # strip cyclic -> (lat, 144)
+   d = np.roll(d, -nroll, axis=1)                                           # roll
+   return np.concatenate([d, d[:, :1]], axis=1)                             # re-add cyclic -> (lat, 145)
+
+  lon2d, lat2d = np.meshgrid(lon_plot, diff.lat.values)
+  lon1d_skip   = lon_plot[skip1D]                                           # for quiver x-positions
 
   #----------------
   # Define figures
@@ -872,7 +928,7 @@ def plot_diff_contour_map_avg(
     for c in range(2):
      axes[r,c].set_title(fig_let[2*r+c]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases_diff[2*r+c],loc=ttlloc,
                                                                                             fontsize=ttlfts,pad=ttlpad)
-     axes[r,c].set_extent([LonMin,LonMax,LatMin,LatMax],proj)
+     axes[r,c].set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())
      if coast == True:
       axes[r,c].add_feature(cfeature.COASTLINE,linewidths=coastlw)
      if lake == True:
@@ -886,7 +942,7 @@ def plot_diff_contour_map_avg(
    for i in range(len(cases)-1):
     axes[i].set_title(fig_let[i]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases_diff[i],loc=ttlloc,
                                                                                  fontsize=ttlfts,pad=ttlpad)
-    axes[i].set_extent([LonMin,LonMax,LatMin,LatMax],proj)
+    axes[i].set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())
     # Figure map
     if coast == True:
      axes[i].add_feature(cfeature.COASTLINE,linewidths=coastlw)
@@ -961,26 +1017,26 @@ def plot_diff_contour_map_avg(
    for r in range(rowceil):
     for c in range(2):
       if cntr_type == 'AreaFill':
-       cntr = diff[2*r+c,:,:].plot.contourf(ax=axes[r,c],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                            add_colorbar=False,add_labels=False,extend=extnd)
+       cntr = axes[r,c].pcolormesh(lon2d,lat2d,prep_data(diff[2*r+c,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                   norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
       elif cntr_type == 'RasterFill':
-       cntr = diff[2*r+c,:,:].plot(ax=axes[r,c],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                   add_colorbar=False,add_labels=False,extend=extnd)
+       cntr = axes[r,c].pcolormesh(lon2d,lat2d,prep_data(diff[2*r+c,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                   norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
       if overlay_vec == True:
-       vec = axes[r,c].quiver(uc.lon[skip1D],uc.lat[skip1D],udiff[2*r+c,:,:][skip2D],vdiff[2*r+c,:,:][skip2D],scale_units='height',pivot='mid',
+       vec = axes[r,c].quiver(lon1d_skip,udiff.lat[skip1D],prep_data(udiff[2*r+c,:,:].values)[skip2D],prep_data(vdiff[2*r+c,:,:].values)[skip2D],transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
                                scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
        qkey = axes[r,c].quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
   if numcases == 'odd':
    for i in range(len(cases)-1):
      if cntr_type == 'AreaFill':
-      cntr = diff[i,:,:].plot.contourf(ax=axes[i],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                       add_colorbar=False,add_labels=False,extend=extnd)
+      cntr = axes[i].pcolormesh(lon2d,lat2d,prep_data(diff[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
      elif cntr_type == 'RasterFill':
-      cntr = diff[i,:,:].plot(ax=axes[i],transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                              add_colorbar=False,add_labels=False,extend=extnd)
+      cntr = axes[i].pcolormesh(lon2d,lat2d,prep_data(diff[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                                norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
      if overlay_vec == True:
-      vec = axes[i].quiver(uc.lon[skip1D],uc.lat[skip1D],udiff[i,:,:][skip2D],vdiff[i,:,:][skip2D],scale_units='height',pivot='mid',
+      vec = axes[i].quiver(lon1d_skip,udiff.lat[skip1D],prep_data(udiff[i,:,:].values)[skip2D],prep_data(vdiff[i,:,:].values)[skip2D],transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
                               scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
       qkey = axes[i].quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
@@ -989,7 +1045,7 @@ def plot_diff_contour_map_avg(
   #-------------------------------
 
   cbar = fig.colorbar(cntr,ax=axes,orientation=cbar_orient,ticks=MultipleLocator(tkstd),shrink=cbar_shrk,pad=cbar_pad,label=units,
-                                   spacing=cbar_sp)
+                                   spacing=cbar_sp,extend=extnd)
   cbar.ax.tick_params(labelsize=cbar_lblsz)
 
   #------------------------------
@@ -1081,7 +1137,7 @@ def plot_diff_contour_map_avg(
     figi = plt.figure(figsize=(figw,figh),dpi=fdpi)
     axi  = figi.add_subplot(111, projection=proj)
     axi.set_title(fig_let[i]+' '+str(seas)+' '+str(var_name)+str(vec_name)+' '+cases_diff[i],loc=ttlloc,fontsize=ttlfts,pad=ttlpad) 
-    axi.set_extent([LonMin,LonMax,LatMin,LatMax],proj)                                   
+    axi.set_extent([LonMin,LonMax,LatMin,LatMax],ccrs.PlateCarree())                                   
     if coast == True:
      axi.add_feature(cfeature.COASTLINE,linewidths=coastlw)
     if lake == True:
@@ -1095,15 +1151,16 @@ def plot_diff_contour_map_avg(
                          glcolor=glcolor,lonlblsp=lonlblsp,latlblsp=latlblsp,xpads=xpads,ypads=ypads,tklblsz=tklblsz,
                          top=False,bot=True,left=True,right=True)
     if cntr_type == 'AreaFill':
-     cntr = diff[i,:,:].plot.contourf(ax=axi,transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                            add_colorbar=True,cbar_kwargs={'orientation':cbar_orient,'ticks':MultipleLocator(tkstd),
-                                            'shrink':cbar_shrk,'pad':cbar_pad,'label':units,'spacing':cbar_sp},add_labels=False,extend=extnd)                     
+     cntr = axi.pcolormesh(lon2d,lat2d,prep_data(diff[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                           norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
     elif cntr_type == 'RasterFill':
-     cntr = diff[i,:,:].plot(ax=axi,transform=proj,cmap=colort,levels=np.arange(loval,hival+spval,spval),
-                                    add_colorbar=True,cbar_kwargs={'orientation':cbar_orient,'ticks':MultipleLocator(tkstd),
-                                    'shrink':cbar_shrk,'pad':cbar_pad,'label':units},add_labels=False,extend=extnd)
+     cntr = axi.pcolormesh(lon2d,lat2d,prep_data(diff[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
+                           norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
+    cbar_i = plt.colorbar(cntr,ax=axi,orientation=cbar_orient,ticks=MultipleLocator(tkstd),
+                          shrink=cbar_shrk,pad=cbar_pad,label=units,spacing=cbar_sp,extend=extnd)
+    cbar_i.ax.tick_params(labelsize=cbar_lblsz)
     if overlay_vec == True:
-     vec = axi.quiver(uc.lon[skip1D],uc.lat[skip1D],udiff[i,:,:][skip2D],vdiff[i,:,:][skip2D],scale_units='height',pivot='mid',scale=vec_scale,
+     vec = axi.quiver(lon1d_skip,udiff.lat[skip1D],prep_data(udiff[i,:,:].values)[skip2D],prep_data(vdiff[i,:,:].values)[skip2D],transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',scale=vec_scale,
                                       width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
      qkey = axi.quiverkey(vec,0.8,0.2,vec_ref,str(vec_ref)+str(vec_units),labelpos='N',coordinates='figure',color='k')
     if regbox == True:

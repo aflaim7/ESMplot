@@ -16,7 +16,7 @@ All maps are Pacific-centered (central longitude = 180°) and individual tagged 
 `/seasonalDiffs/` contains seasonal difference maps for each individual tagged region, sorted according to forcing experiment.  
 `/taggedMaps/` contains global text-based maps for ANNUAL watertag anomalies for each region of interest. Destination region definitions are summarized in the "Desination regions" section below.  
 `/SundaTags/` contains initial exploratory plots made in January 2026. This directory contains global maps (both individual experiments and anomalies) and text-based maps for the Sunda shelf region.  
-`/prect_d18Op_notags/` contains seasonal total (not broken up into tagged regions) precipitation and d18Op anomalies for each experiment minus the control.
+`/prect_d18Op_notags/` contains seasonal total (not broken up into tagged regions) precipitation and d18Op anomalies for each experiment minus the control. Sub-directories contain Atlantic and Pacific centered maps.
 
 ---
 ## Destination regions
@@ -78,7 +78,7 @@ Each forcing experiment is plotted for 5 seasons:
 | Script | Description |
 |---|---|
 | `examples/calculate_watertags_LGM_forcing_seasons.py` | Main call script that loops over seasons and forcings |
-| `examples/plot_LGM_PRECT_d18Op_seasonal_forcing.py` | Call script that loops over seasons and forcings for total PRECT and δ¹⁸Oₚ |
+| `examples/plot_LGM_PRECT_d18Op_seasonal_forcing_pacificCenter.py` | Call script that loops over seasons and forcings for total PRECT and δ¹⁸Oₚ centered on the pacific, likewise for the atlanticCenter variation|
 | `ESMplot/watertagging/watertag_plots_cenlon_LGMregions.py` | Plotting functions (`plot_tagged_precip_and_d18Op`) |
 | `ESMplot/watertagging/seas_avg_LL_watertags.py` | Seasonal averaging for water tagging variables |
 | `ESMplot/watertagging/tagged_regions.py` | Tag region boundary definitions |
