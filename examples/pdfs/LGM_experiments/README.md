@@ -16,6 +16,7 @@ All maps are Pacific-centered (central longitude = 180°) and individual tagged 
 `/seasonalDiffs/` contains seasonal difference maps for each individual tagged region, sorted according to forcing experiment.  
 `/taggedMaps/` contains global text-based maps for ANNUAL watertag anomalies for each region of interest. Destination region definitions are summarized in the "Desination regions" section below.  
 `/SundaTags/` contains initial exploratory plots made in January 2026. This directory contains global maps (both individual experiments and anomalies) and text-based maps for the Sunda shelf region.  
+`/prect_d18Op_notags/` contains seasonal total (not broken up into tagged regions) precipitation and d18Op anomalies for each experiment minus the control.
 
 ---
 ## Destination regions
@@ -72,6 +73,18 @@ Each forcing experiment is plotted for 5 seasons:
 
 ---
 
+## Scripts
+
+| Script | Description |
+|---|---|
+| `examples/calculate_watertags_LGM_forcing_seasons.py` | Main call script that loops over seasons and forcings |
+| `examples/plot_LGM_PRECT_d18Op_seasonal_forcing.py` | Call script that loops over seasons and forcings for total PRECT and δ¹⁸Oₚ |
+| `ESMplot/watertagging/watertag_plots_cenlon_LGMregions.py` | Plotting functions (`plot_tagged_precip_and_d18Op`) |
+| `ESMplot/watertagging/seas_avg_LL_watertags.py` | Seasonal averaging for water tagging variables |
+| `ESMplot/watertagging/tagged_regions.py` | Tag region boundary definitions |
+
+---
+
 ## Tagged source regions
 
 40 regions total: 13 land, 27 ocean. Region boundaries and codes are defined in `ESMplot/watertagging/tagged_regions.py`.
@@ -120,20 +133,21 @@ Each forcing experiment is plotted for 5 seasons:
 | 40 | SIND | South Indian |
 
 ---
-
-## Scripts
-
-| Script | Description |
-|---|---|
-| `examples/calculate_watertags_LGM_forcing_seasons.py` | Main call script that loops over seasons and forcings |
-| `ESMplot/watertagging/watertag_plots_cenlon_LGMregions.py` | Plotting functions (`plot_tagged_precip_and_d18Op`) |
-| `ESMplot/watertagging/seas_avg_LL_watertags.py` | Seasonal averaging for water tagging variables |
-| `ESMplot/watertagging/tagged_regions.py` | Tag region boundary definitions |
-
----
 ## Communication archive
 Relevant communication for this analysis is included below for future reference.  
+---
+Konecky, Bronwen <bkonecky@wustl.edu>	Thu, May 28, 2026 at 12:26 PM
+To: Andrew Flaim <af106@rice.edu>
 
+Hi again Andrew,
+
+Wow your markdown file is extremely nice. :) And thanks for generating all these plots! I’m still sorting through them. One thing I am wondering is whether you could make a few plots of just maps of ANN and seasonal mean PRECT and d18Op anomalies (relative to PI) with 850 hPa wind overlays for each of the LGM simulations. So not for the water tags, but for the non-tagged simulations (or, just the regular PRECT and d18Op for the same years 6-25 from the water tag simulations would work too).
+
+This will help to give some overall context for regions that are wetter or drier overall, but receive less/more moisture from different tags.
+
+Thank you!
+
+---
 Konecky, Bronwen <bkonecky@wustl.edu>	Thu, May 21, 2026 at 3:46 PM
 To: "af106@rice.edu" <af106@rice.edu>, "Flaim, Andrew" <aflaim@wustl.edu>
 
