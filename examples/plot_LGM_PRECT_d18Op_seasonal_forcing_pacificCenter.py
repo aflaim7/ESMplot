@@ -37,7 +37,7 @@ from ESMplot.plotting.plot_map_avg_functions import plot_contour_map_avg
 # Which variables to plot
 #-------------------------------------------------
 
-PLOT_PRECT = True
+PLOT_PRECT = False
 PLOT_d18Op = True
 
 #-------------------------------------------------
@@ -123,8 +123,8 @@ p_units    = 'mm/day'
 p_colort   = cmaps.BlueYellowRed_r
 
 # d18Op anomaly
-o_loval    = -2.0
-o_hival    =  2.0
+o_loval    = -1.5
+o_hival    =  1.5
 o_spval    =  0.1
 o_tkstd    =  0.5
 o_extnd    = 'both'
@@ -135,13 +135,13 @@ o_colort   = cmaps.BlueYellowRed
 # Map specifications
 #-------------------------------------------------
 
-LatMin = -90.;  LatMax = 90.
+LatMin = -45.;  LatMax = 45.
 LonMin = -180.; LonMax = 180.
 proj   = ccrs.PlateCarree(central_longitude=180.)
 
 cntr_type  = 'RasterFill'
 folderpath = 'pdfs'
-filesuf    = '.pdf'
+filesuf    = '_lowlat.pdf'
 
 ####################################################################################################################
 #
@@ -280,6 +280,8 @@ for season_name, MON in SEASONS.items():
         print(f'  Plotting d18Op anomaly [{season_name}]...')
 
         if overlay_vec:
+            p95_i = np.nanpercentile(np.sqrt(u0**2 + v0**2), 95)
+            vec_scale_p = vec_scale * (p95_i / p95_full) if p95_i > 0. else vec_scale
             vec_scale_o = vec_scale_p
         else:
             u_diff, v_diff = None, None
@@ -292,6 +294,9 @@ for season_name, MON in SEASONS.items():
             seas=season_name,
             units=o_units,
             proj=proj,
+            figw=10,figh=5,
+            hspace=0.1,wspace=0.1,
+            cbar_pad=0.12,
             cntr_type=cntr_type,
             colort=o_colort,
             loval=o_loval, hival=o_hival, spval=o_spval, tkstd=o_tkstd, extnd=o_extnd,
