@@ -72,8 +72,8 @@ model = 'cam'
 CASES = [dir + 'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
+        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
 cases = ['0ka',
          #'$21ka$']
          #'$21ka_{GHG}$']
@@ -81,7 +81,7 @@ cases = ['0ka',
          '$21ka_{SL}$']
 
 # Anything extra to add to output file name?
-extra_name = 'EquatorialIPWP' 
+extra_name = 'IndianMonsoon' 
 
 #--------------------------------
 # Seasonal averaging variables
@@ -92,9 +92,9 @@ begi = 'beg'  # 'beg' or index like 0
 endi = 'end'  # 'end' or index like 12
 
 # Season to average over, indices corresponding to individual months, season string will automatically populate later 
-#MON = [0,1,2,3,4,5,6,7,8,9,10,11]
+MON = [0,1,2,3,4,5,6,7,8,9,10,11]
 
-MON = [2,3,4] # MAM
+#MON = [2,3,4] # MAM
 #MON = [5,6,7] # JJA
 #MON = [8,9,10] # SON
 #MON = [11,0,1] # DJF
@@ -184,16 +184,16 @@ reg_name = ''
 #eastlon  = -90.0
 
 # EquatorialIPWP
-southlat = -10
-northlat = 10
-westlon  = 90
-eastlon  = 150
+# southlat = -10
+# northlat = 10
+# westlon  = 90
+# eastlon  = 150
 
 # IndianMonsoon
-# southlat = 5
-# northlat = 25
-# westlon  = 60
-# eastlon  = 80
+southlat = 5
+northlat = 25
+westlon  = 60
+eastlon  = 80
 
 # SEAmonsoon
 # southlat = 10
