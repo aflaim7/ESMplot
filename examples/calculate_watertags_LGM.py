@@ -43,14 +43,14 @@ from ESMplot.climate_analysis.coordinate_functions import lat_lon_index_array
 #------------------------------------------------
 
 # Global maps with values for precip, precip pct, and d18Op
-TEXT_MAPS = False  
+TEXT_MAPS = True  
 
 # Print values for each tag region to screen
 PRINT_VAL = False 
 
 # Individual global maps of...
-IND_PRECIP = True  
-IND_d18Op  = True
+IND_PRECIP = False  
+IND_d18Op  = False
 
 # Excel sheet with monthly values for each tagged region by month
 MAKE_EXCEL = False 
@@ -70,18 +70,18 @@ model = 'cam'
 # File paths and names for each case
 # 20yr water tagging experiments (cam only)
 CASES = [dir + 'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
-        dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
+        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
+        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
 cases = ['0ka',
-         '$21ka$']
+         #'$21ka$']
          #'$21ka_{GHG}$']
          #'$21ka_{GLAC}$']
-         #'$21ka_{SL}$']
+         '$21ka_{SL}$']
 
 # Anything extra to add to output file name?
-extra_name = 'd18OscaleAdjusted' 
+extra_name = 'EquatorialIPWP' 
 
 #--------------------------------
 # Seasonal averaging variables
@@ -92,11 +92,12 @@ begi = 'beg'  # 'beg' or index like 0
 endi = 'end'  # 'end' or index like 12
 
 # Season to average over, indices corresponding to individual months, season string will automatically populate later 
-MON = [0,1,2,3,4,5,6,7,8,9,10,11]
-#MON = [6,7,8,9]
-#MON = [5,6,7]
-#MON = [8,9,10]
-#MON = [11,0,1]
+#MON = [0,1,2,3,4,5,6,7,8,9,10,11]
+
+MON = [2,3,4] # MAM
+#MON = [5,6,7] # JJA
+#MON = [8,9,10] # SON
+#MON = [11,0,1] # DJF
 
 # Reference list for indices
 # Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
