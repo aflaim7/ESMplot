@@ -16,7 +16,8 @@ All maps are Pacific-centered (central longitude = 180°) and individual tagged 
 `/seasonalDiffs/` contains seasonal difference maps for each individual tagged region, sorted according to forcing experiment.  
 `/taggedMaps/` contains global text-based maps for ANNUAL watertag anomalies for each region of interest. Destination region definitions are summarized in the "Desination regions" section below.  
 `/SundaTags/` contains initial exploratory plots made in January 2026. This directory contains global maps (both individual experiments and anomalies) and text-based maps for the Sunda shelf region.  
-`/prect_d18Op_notags/` contains seasonal total (not broken up into tagged regions) precipitation and d18Op anomalies for each experiment minus the control. Sub-directories contain Atlantic and Pacific centered maps.
+`/prect_d18Op_notags/` contains seasonal total (not broken up into tagged regions) precipitation and d18Op anomalies for each experiment minus the control. Sub-directories contain Atlantic and Pacific centered maps. `/pacific_centered/low_latitudes/` contains maps restricted to 40S-40N.  
+`/taggedMaps/EqIPWP_singleForcing/` contains water tag text maps for annual and seasonal single forcing experiments for the Equatorial IPWP.
 
 ---
 ## Destination regions
@@ -135,6 +136,32 @@ Each forcing experiment is plotted for 5 seasons:
 ---
 ## Communication archive
 Relevant communication for this analysis is included below for future reference.  
+---
+Andrew Flaim <af106@rice.edu>	Thu, Jun 18, 2026 at 9:35 PM
+To: "Konecky, Bronwen" <bkonecky@wustl.edu>  
+Hi Bronwen,
+
+Apologies again for taking so long to get around to this, but here's a summary of the new LGM watertag plots based on our last conversation:
+
+I re-plotted the global (meaning not tag-specific) precipitation and d18O maps with latitude limits spanning 40S-40N and scaled the contours accordingly. This includes both annual and seasonal mean maps. Hopefully this helps highlight the tropical changes better. You can find those results here: /paleonas/aflaim/ESMplot/examples/pdfs/LGM_experiments/prect_d18Op_noTags/pacific_centered/low_latitudes/
+
+I also made seasonal and single forcing versions of the Equatorial IPWP watertag text maps. You can find those here: /paleonas/aflaim/ESMplot/examples/pdfs/LGM_experiments/taggedMaps/EqIPWP_singleForcing
+
+Finally, I adjusted the color scale range for the individual region maps for the annual mean full forcing d18O plots to better highlight the isotope changes from each region. You can find those updated maps on slides 41-80 of this file: /paleonas/aflaim/ESMplot/examples/pdfs/LGM_experiments/seasonalDiffs/full_forcing/$21ka$-0ka_ANN_watertagged_prect_d18Op_wind850hPa_d18OscaleAdjusted.pdf
+(This especially helps for plots like slide 57 and slide 62.)
+
+Hopefully this is useful and let me know if you'd like any adjustments or new plots.
+
+Best,
+Andrew
+
+---
+In person meeting June 5, 2026  
+Requested analysis:  
+- Replot LGM d18O maps to be 40S-40N and rescale the color contours  
+- Make single forcing EqIPWP water tag text maps for ANN and seasonal
+- Adjust 21ka-0ka full forcing individual region map color bars and latitude range  
+
 ---
 Konecky, Bronwen <bkonecky@wustl.edu>	Thu, May 28, 2026 at 12:26 PM
 To: Andrew Flaim <af106@rice.edu>
