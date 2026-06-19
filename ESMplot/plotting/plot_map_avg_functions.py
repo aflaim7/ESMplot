@@ -52,7 +52,9 @@ def plot_contour_map_avg(
                          cbar_orient: str = 'horizontal', cbar_pad: float = 0.08, 
                          cbar_shrk: float = 0.6, cbar_sp: str = 'proportional', cbar_lblsz: float = 10.,
                          overlay_vec: bool = False, u: xr.DataArray = None, v: xr.DataArray = None,
-                         vec_scale: float = 100., vec_wid: float = 0.002, vec_hal: float = 4.,
+                         vec_scale: float = 100., vec_pctl: float = 95., vec_arrow_frac: float = 0.1,
+                         vec_key_yoffset: float = -0.05,
+                         vec_wid: float = 0.002, vec_hal: float = 4.,
                          vec_hdl: float = 4., vec_hdw: float = 4., vec_skip: int = 2, 
                          vec_ref: float = 10., vec_units: str = '', vec_name: str = '',
                          regbox: bool = False, regcol: str = 'r', regline: str = '-', 
@@ -169,7 +171,19 @@ def plot_contour_map_avg(
                               Default = None, None
   vec_scale: class 'float', Scales the length of the arrow inversely. Number of data units per arrow lenth 
                             unit. A smaller scale parameter makes the arrow longer. Scale_units are 
-                            permanently set to 'height' for this function. Default = 100.
+                            permanently set to 'height' for this function. Fallback value only used if the
+                            vec_pctl-based percentile below comes out non-positive or non-finite.
+                            Default = 100.
+  vec_pctl: class 'float', Percentile (0-100) of wind speed magnitude, computed within the plotted domain
+                           (LatMin/LatMax, LonMin/LonMax) separately for each panel, used to set that
+                           panel's quiver scale. Default = 95.
+  vec_arrow_frac: class 'float', Fraction of the axes height that a wind vector at the vec_pctl percentile
+                                 magnitude should span. Replaces the need to hand-tune vec_scale: raise this
+                                 for longer arrows, lower it for shorter ones. Default = 0.1
+  vec_key_yoffset: class 'float', Figure-fraction vertical offset, measured from each panel's own bottom
+                                  edge (after the colorbar is placed), used to put the quiver reference key
+                                  outside the map instead of overlapping it. Negative values place the key
+                                  below the panel; make more negative for more clearance. Default = -0.05
   vec_wid: class 'float', Shaft width of vector. Default = 0.002
   vec_hal: class 'float', Head axis length of vector. Default = 4.
   vec_hdl: class 'float', Head length of vector. Default = 4.
@@ -300,6 +314,26 @@ def plot_contour_map_avg(
   lon2d, lat2d = np.meshgrid(lon_plot, varc.lat.values)
   lon1d_skip   = lon_plot[skip1D]
 
+  #-----------------------------------------------------------------------
+  # Per-panel wind vector scaling
+  #-----------------------------------------------------------------------
+  # Quiver uses scale_units='height', so arrow length = magnitude/scale as a
+  # fraction of the axes height. Deriving `scale` from the vec_pctl percentile
+  # of wind speed *within the plotted domain* (LatMin/LatMax, LonMin/LonMax)
+  # means each panel's arrows are sized relative to its own typical wind
+  # speed, rather than one fixed vec_scale shared identically across panels
+  # that may have very different wind magnitudes.
+
+  lat_mask = (varc.lat.values >= LatMin) & (varc.lat.values <= LatMax)
+  lon_mask = (lon_plot >= LonMin) & (lon_plot <= LonMax)
+
+  def panel_vec_scale(u2d, v2d):
+   spd = np.sqrt(u2d[lat_mask][:, lon_mask]**2 + v2d[lat_mask][:, lon_mask]**2)
+   p = np.nanpercentile(spd, vec_pctl)
+   if not np.isfinite(p) or p <= 0.:
+    return vec_scale
+   return p / vec_arrow_frac
+
   #----------------
   # Define figures
   #----------------
@@ -424,6 +458,8 @@ def plot_contour_map_avg(
   # Plot the variables 
   #----------------------------------
 
+  vec_dict = {}  # Quiver handles, placed once the final layout (incl. colorbar) settles
+
   if numcases == 'even':
    for r in range(rowceil):
     for c in range(2):
@@ -434,10 +470,13 @@ def plot_contour_map_avg(
        cntr = axes[r,c].pcolormesh(lon2d,lat2d,prep_data(varc[2*r+c,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
                                    norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
       if overlay_vec == True:
-       vec = axes[r,c].quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[2*r+c,:,:].values)[skip2D],prep_data(vc[2*r+c,:,:].values)[skip2D],
+       u2d = prep_data(uc[2*r+c,:,:].values)
+       v2d = prep_data(vc[2*r+c,:,:].values)
+       scale_i = panel_vec_scale(u2d, v2d)
+       vec = axes[r,c].quiver(lon1d_skip,uc.lat[skip1D],u2d[skip2D],v2d[skip2D],
                               transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
-                              scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
-       qkey = axes[r,c].quiverkey(vec,0.8,0.2,vec_ref,str(vec_ref)+str(vec_units),labelpos='N',coordinates='figure',color='k')
+                              scale=scale_i,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
+       vec_dict[(r,c)] = vec
 
   if numcases == 'odd':
    for i in range(len(cases)):
@@ -448,10 +487,13 @@ def plot_contour_map_avg(
       cntr = axes[i].pcolormesh(lon2d,lat2d,prep_data(varc[i,:,:].values),transform=ccrs.PlateCarree(),cmap=colort,
                                 norm=mpl.colors.BoundaryNorm(np.arange(loval,hival+spval,spval),colort.N,extend=extnd))
      if overlay_vec == True:
-      vec = axes[i].quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[i,:,:].values)[skip2D],prep_data(vc[i,:,:].values)[skip2D],
+      u2d = prep_data(uc[i,:,:].values)
+      v2d = prep_data(vc[i,:,:].values)
+      scale_i = panel_vec_scale(u2d, v2d)
+      vec = axes[i].quiver(lon1d_skip,uc.lat[skip1D],u2d[skip2D],v2d[skip2D],
                            transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',
-                           scale=vec_scale,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
-      qkey = axes[i].quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
+                           scale=scale_i,width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
+      vec_dict[i] = vec
 
   #-------------------------------
   # Color bar for plots 
@@ -460,6 +502,32 @@ def plot_contour_map_avg(
   cbar = fig.colorbar(cntr,ax=axes,orientation=cbar_orient,ticks=MultipleLocator(tkstd),shrink=cbar_shrk,pad=cbar_pad,label=units,
                                    spacing=cbar_sp,extend=extnd)
   cbar.ax.tick_params(labelsize=cbar_lblsz)
+
+  #-------------------------------------------------------------------------
+  # Add the quiver reference key now, after the colorbar has carved out its
+  # space. We measure each panel's actual final box (figure-fraction
+  # coordinates, via get_position()) and place the key just below its
+  # bottom edge — outside the map rectangle by construction, rather than
+  # guessing a fraction that might land inside it.
+  #-------------------------------------------------------------------------
+
+  if overlay_vec == True:
+   fig.canvas.draw()
+   if numcases == 'even':
+    for r in range(rowceil):
+     for c in range(2):
+      vec = vec_dict[(r,c)]
+      pos = axes[r,c].get_position()
+      qx  = pos.x0 + 0.9*(pos.x1 - pos.x0)
+      qy  = pos.y0 + vec_key_yoffset
+      qkey = axes[r,c].quiverkey(vec,qx,qy,vec_ref,str(vec_ref)+str(vec_units),labelpos='N',coordinates='figure',color='k')
+   if numcases == 'odd':
+    for i in range(len(cases)):
+     vec = vec_dict[i]
+     pos = axes[i].get_position()
+     qx  = pos.x0 + 0.9*(pos.x1 - pos.x0)
+     qy  = pos.y0 + vec_key_yoffset
+     qkey = axes[i].quiverkey(vec,qx,qy,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
 
   #------------------------------
   # Add region and point to map
@@ -574,10 +642,17 @@ def plot_contour_map_avg(
                           shrink=cbar_shrk,pad=cbar_pad,label=units,spacing=cbar_sp,extend=extnd)
     cbar_i.ax.tick_params(labelsize=cbar_lblsz)
     if overlay_vec == True:
-     vec = axi.quiver(lon1d_skip,uc.lat[skip1D],prep_data(uc[i,:,:].values)[skip2D],prep_data(vc[i,:,:].values)[skip2D],
-                      transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',scale=vec_scale,
+     u2d = prep_data(uc[i,:,:].values)
+     v2d = prep_data(vc[i,:,:].values)
+     scale_i = panel_vec_scale(u2d, v2d)
+     vec = axi.quiver(lon1d_skip,uc.lat[skip1D],u2d[skip2D],v2d[skip2D],
+                      transform=ccrs.PlateCarree(),scale_units='height',pivot='mid',scale=scale_i,
                       width=vec_wid,headlength=vec_hdl,headwidth=vec_hdw,headaxislength=vec_hal)
-     qkey = axi.quiverkey(vec,0.8,0.2,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
+     figi.canvas.draw()  # finalize the post-colorbar box before placing the key
+     pos = axi.get_position()
+     qx  = pos.x0 + 0.9*(pos.x1 - pos.x0)
+     qy  = pos.y0 + vec_key_yoffset
+     qkey = axi.quiverkey(vec,qx,qy,vec_ref,str(int(vec_ref))+str(vec_units),labelpos='N',coordinates='figure',color='k')
     if regbox == True:
      draw_region_box(ax=axi,slat=slat-latadj,nlat=nlat+latadj,wlon=wlon-lonadj,elon=elon+lonadj,
                       linestyle=regline,facecolor='none',edgecolor=regcol,linewidth=reglw,zorder=10)

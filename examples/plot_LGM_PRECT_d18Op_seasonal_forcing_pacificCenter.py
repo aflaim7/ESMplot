@@ -99,8 +99,11 @@ overlay_vec  = True
 WIND_LEVEL   = 850
 plev         = np.arange(0, 1050, 50)
 
-vec_scale    = 100.
-vec_ref      = 10.
+vec_scale    = 100.    # fallback only; per-panel percentile scaling (below) normally takes over
+vec_pctl     = 95.     # percentile of wind speed (within LatMin:LatMax) used to set each panel's scale
+vec_arrow_frac = 0.1   # fraction of axis height a vec_pctl-magnitude arrow should span; tune for arrow length
+vec_key_yoffset = -0.08  # figure-fraction gap below each panel where the reference key is drawn; more negative = more clearance
+vec_ref      = 2.
 vec_units    = 'm/s'
 vec_name     = f'850hPaWind'
 vec_wid      = 0.002
@@ -192,14 +195,6 @@ for season_name, MON in SEASONS.items():
         u_all = xr.concat(u_list, dim='case').assign_coords(case=cases)
         v_all = xr.concat(v_list, dim='case').assign_coords(case=cases)
 
-    # Dynamic vec_scale anchored to full forcing (index 1 = 21ka-0ka)
-    if overlay_vec:
-        u0 = (u_all.sel(case=cases[1]) - u_all.sel(case=cases[0])).values
-        v0 = (v_all.sel(case=cases[1]) - v_all.sel(case=cases[0])).values
-        p95_full = np.nanpercentile(np.sqrt(u0**2 + v0**2), 95)
-        if p95_full == 0.:
-            p95_full = 1.
-
     #-----------------------------------------------------------------
     # Build difference arrays: each forcing minus 0ka (index 0)
     #-----------------------------------------------------------------
@@ -228,13 +223,6 @@ for season_name, MON in SEASONS.items():
             dim='case'
         ).assign_coords(case=cases_diff)
 
-        # Dynamic vec_scale anchored to full forcing (index 0 of diff = 21ka-0ka)
-        u0 = u_diff.sel(case=cases_diff[0]).values
-        v0 = v_diff.sel(case=cases_diff[0]).values
-        p95_full = np.nanpercentile(np.sqrt(u0**2 + v0**2), 95)
-        if p95_full == 0.:
-            p95_full = 1.
-
     #-----------------------------------------------------------------
     # Plot precipitation anomaly
     #-----------------------------------------------------------------
@@ -243,12 +231,8 @@ for season_name, MON in SEASONS.items():
 
         print(f'  Plotting precipitation anomaly [{season_name}]...')
 
-        if overlay_vec:
-            p95_i = np.nanpercentile(np.sqrt(u0**2 + v0**2), 95)
-            vec_scale_p = vec_scale * (p95_i / p95_full) if p95_i > 0. else vec_scale
-        else:
+        if not overlay_vec:
             u_diff, v_diff = None, None
-            vec_scale_p = vec_scale
 
         plot_contour_map_avg(
             var=prect_diff,
@@ -263,7 +247,8 @@ for season_name, MON in SEASONS.items():
             LatMin=LatMin, LatMax=LatMax, LonMin=LonMin, LonMax=LonMax,
             overlay_vec=overlay_vec,
             u=u_diff, v=v_diff,
-            vec_scale=vec_scale_p, vec_ref=vec_ref, vec_units=vec_units, vec_name=vec_name,
+            vec_scale=vec_scale, vec_pctl=vec_pctl, vec_arrow_frac=vec_arrow_frac, vec_key_yoffset=vec_key_yoffset,
+            vec_ref=vec_ref, vec_units=vec_units, vec_name=vec_name,
             vec_wid=vec_wid, vec_hdl=vec_hdl, vec_hdw=vec_hdw, vec_hal=vec_hal, vec_skip=vec_skip,
             Ind_plots=True,
             folderpath=folderpath,
@@ -279,13 +264,8 @@ for season_name, MON in SEASONS.items():
 
         print(f'  Plotting d18Op anomaly [{season_name}]...')
 
-        if overlay_vec:
-            p95_i = np.nanpercentile(np.sqrt(u0**2 + v0**2), 95)
-            vec_scale_p = vec_scale * (p95_i / p95_full) if p95_i > 0. else vec_scale
-            vec_scale_o = vec_scale_p
-        else:
+        if not overlay_vec:
             u_diff, v_diff = None, None
-            vec_scale_o = vec_scale
 
         plot_contour_map_avg(
             var=d18Op_diff,
@@ -303,7 +283,8 @@ for season_name, MON in SEASONS.items():
             LatMin=LatMin, LatMax=LatMax, LonMin=LonMin, LonMax=LonMax,
             overlay_vec=overlay_vec,
             u=u_diff, v=v_diff,
-            vec_scale=vec_scale_o, vec_ref=vec_ref, vec_units=vec_units, vec_name=vec_name,
+            vec_scale=vec_scale, vec_pctl=vec_pctl, vec_arrow_frac=vec_arrow_frac, vec_key_yoffset=vec_key_yoffset,
+            vec_ref=vec_ref, vec_units=vec_units, vec_name=vec_name,
             vec_wid=vec_wid, vec_hdl=vec_hdl, vec_hdw=vec_hdw, vec_hal=vec_hal, vec_skip=vec_skip,
             Ind_plots=True,
             folderpath=folderpath,
