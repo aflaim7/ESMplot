@@ -37,7 +37,7 @@ from ESMplot.plotting.plot_map_avg_functions import plot_contour_map_avg
 # Which variables to plot
 #-------------------------------------------------
 
-PLOT_PRECT = False
+PLOT_PRECT = True
 PLOT_d18Op = True
 
 #-------------------------------------------------
@@ -241,6 +241,9 @@ for season_name, MON in SEASONS.items():
             seas=season_name,
             units=p_units,
             proj=proj,
+            figw=10,figh=5,
+            hspace=0.1,wspace=0.1,
+            cbar_pad=0.12,
             cntr_type=cntr_type,
             colort=p_colort,
             loval=p_loval, hival=p_hival, spval=p_spval, tkstd=p_tkstd, extnd=p_extnd,

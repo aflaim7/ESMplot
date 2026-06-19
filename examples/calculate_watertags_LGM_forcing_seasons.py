@@ -104,9 +104,9 @@ reg_name = ''
 
 # EquatorSouthAmerica
 southlat = -10
-northlat =   0
-westlon  = -60
-eastlon  = -30
+northlat =  10
+westlon  = 90
+eastlon  = 120
 
 #-----------------------------------------------------------------
 # Contour levels for DIFF plots
@@ -130,14 +130,14 @@ o_extnd = 'both'
 # Map extent
 #------------------------------------------------------------
 
-World  = True
+World = True
 
 if World:
     LatMin = -90;  LatMax = 90
     LonMin = -180; LonMax = 180
 else:
-    LatMin = -5.;  LatMax = 60.
-    LonMin = -140.; LonMax = 0.
+    LatMin = -40.;  LatMax = 40.
+    LonMin = -180.; LonMax = 180.
 
 # Pacific-centered projection
 central_lon_180 = True
