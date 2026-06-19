@@ -71,14 +71,14 @@ model = 'cam'
 # 20yr water tagging experiments (cam only)
 CASES = [dir + 'f.e12.F_1850_CAM5.wiso.f19.0ka.002.watertags.2.'+model+'.h0.0006-0025.climo.nc',
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21ka.fullforcing.modern.d18Osw.001.watertags.'+model+'.h0.0006-0025.climo.nc']
-        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
-        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+        dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGHG.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
+        #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaGlac.001.watertags.2.'+model+'.h0.0006-0025.climo.nc']
         #dir + 'f.e12.F_1850_CAM5.wiso.f19.21kaSL.002.watertags.'+model+'.h0.0006-0025.climo.nc']
 cases = ['0ka',
          #'$21ka$']
-         #'$21ka_{GHG}$']
+         '$21ka_{GHG}$']
          #'$21ka_{GLAC}$']
-         '$21ka_{SL}$']
+         #'$21ka_{SL}$']
 
 # Anything extra to add to output file name?
 extra_name = 'IndianMonsoon' 

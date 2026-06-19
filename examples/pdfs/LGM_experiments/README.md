@@ -137,6 +137,13 @@ Each forcing experiment is plotted for 5 seasons:
 ## Communication archive
 Relevant communication for this analysis is included below for future reference.  
 ---
+In person meeting June 19, 2026  
+To-Do: 
+- Fix seasonal single forcing text maps for Indian Monsoon  
+- Add season label to panels of text maps
+- Make seasonal single forcing text maps for East Africa
+- Plott mid-tropospheric omega maps for single forcing and seasonal
+---
 Andrew Flaim <af106@rice.edu>	Thu, Jun 18, 2026 at 9:35 PM
 To: "Konecky, Bronwen" <bkonecky@wustl.edu>  
 Hi Bronwen,
