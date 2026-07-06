@@ -273,7 +273,7 @@ def watertagging_values_on_map(
   #-------------------------------------
   # ax1 (land) and ax2 (ocean): precip 
   #-------------------------------------
-  ax1.set_title(str(case)+' precip ('+p_units+')',fontsize=ttlfs,loc=ttlloc)
+  ax1.set_title(str(season)+' '+str(case)+' precip ('+p_units+')',fontsize=ttlfs,loc=ttlloc)
 
   # Map features
   if coast:
@@ -296,7 +296,7 @@ def watertagging_values_on_map(
   #-------------------------------------
   # ax3 (land) and ax4 (ocean): precip%
   #-------------------------------------
-  ax3.set_title(str(case)+' precip (%) ',fontsize=ttlfs,loc=ttlloc)
+  ax3.set_title(str(season)+' '+str(case)+' precip (%) ',fontsize=ttlfs,loc=ttlloc)
 
   if coast:
       ax3.add_feature(cfeature.COASTLINE,linewidths=coastlw)
@@ -317,7 +317,7 @@ def watertagging_values_on_map(
   #-------------------------------------
   # ax5 (land) and ax6 (ocean): d18Op  
   #-------------------------------------
-  ax5.set_title(str(case)+r' $\delta^{18}O_{P}$ ('+o_units+')',fontsize=ttlfs,loc=ttlloc)
+  ax5.set_title(str(season)+' '+str(case)+r' $\delta^{18}O_{P}$ ('+o_units+')',fontsize=ttlfs,loc=ttlloc)
 
   if coast:
       ax5.add_feature(cfeature.COASTLINE,linewidths=coastlw)
