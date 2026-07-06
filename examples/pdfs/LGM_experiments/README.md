@@ -79,6 +79,7 @@ Each forcing experiment is plotted for 5 seasons:
 | Script | Description |
 |---|---|
 | `examples/calculate_watertags_LGM_forcing_seasons.py` | Main call script that loops over seasons and forcings |
+| `examples/calculate_watertags_LGM_forcing_seasons_textmaps.py` | Call script that loops over seasons and forcings for text maps (duplicate?) |
 | `examples/plot_LGM_PRECT_d18Op_seasonal_forcing_pacificCenter.py` | Call script that loops over seasons and forcings for total PRECT and δ¹⁸Oₚ centered on the pacific, likewise for the atlanticCenter variation|
 | `ESMplot/watertagging/watertag_plots_cenlon_LGMregions.py` | Plotting functions (`plot_tagged_precip_and_d18Op`) |
 | `ESMplot/watertagging/seas_avg_LL_watertags.py` | Seasonal averaging for water tagging variables |
@@ -139,10 +140,11 @@ Relevant communication for this analysis is included below for future reference.
 ---
 In person meeting June 19, 2026  
 To-Do: 
-- Fix seasonal single forcing text maps for Indian Monsoon  
-- Add season label to panels of text maps
-- Make seasonal single forcing text maps for East Africa
-- Plott mid-tropospheric omega maps for single forcing and seasonal
+- Fix seasonal single forcing text maps for Indian Monsoon  ✅ Done July 6,2026
+- Add season label to panels of text maps ✅ Done July 6,2026
+- Make seasonal single forcing text maps for East Africa ✅ Done July 6,2026
+- Make seasonal single forcing text maps for SEAmonsoon ✅ Done July 6,2026
+- Plot mid-tropospheric omega maps for single forcing and seasonal
 ---
 Andrew Flaim <af106@rice.edu>	Thu, Jun 18, 2026 at 9:35 PM
 To: "Konecky, Bronwen" <bkonecky@wustl.edu>  
